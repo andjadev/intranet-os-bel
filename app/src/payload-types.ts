@@ -174,6 +174,11 @@ export interface User {
   role: 'superadmin' | 'editor' | 'employee';
   active?: boolean | null;
   /**
+   * Set automatically when a superadmin sets the password.
+   */
+  mustChangePassword?: boolean | null;
+  sessionsValidAfter?: string | null;
+  /**
    * Microsoft Entra object ID
    */
   entraId?: string | null;
@@ -189,6 +194,14 @@ export interface User {
   newcomerNote?: string | null;
   updatedAt: string;
   createdAt: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
   collection: 'users';
 }
 /**
@@ -551,6 +564,8 @@ export interface UsersSelect<T extends boolean = true> {
   initials?: T;
   role?: T;
   active?: T;
+  mustChangePassword?: T;
+  sessionsValidAfter?: T;
   entraId?: T;
   avatar?: T;
   jobTitle?: T;
@@ -564,6 +579,13 @@ export interface UsersSelect<T extends boolean = true> {
   newcomerNote?: T;
   updatedAt?: T;
   createdAt?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  resetPasswordRequestedAt?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -49,6 +49,8 @@ export default buildConfig({
     },
   },
   routes: { admin: '/admin' },
+  // The portal and admin use the REST API only; no GraphQL endpoint to expose.
+  graphQL: { disable: true },
   // The admin language follows the portal's SR/EN/DE switch (see proxy.ts).
   i18n: {
     supportedLanguages: { rs: rsLatin, en, de },
@@ -95,22 +97,22 @@ export default buildConfig({
         prodMigrations: sqliteMigrations,
       }),
   sharp,
-  plugins: s3Bucket
-    ? [
-        s3Storage({
-          collections: { media: true },
-          bucket: s3Bucket,
-          config: {
-            endpoint: process.env.S3_ENDPOINT,
-            region: process.env.S3_REGION || 'auto',
-            // Supabase Storage and most non-AWS providers need path-style URLs.
-            forcePathStyle: true,
-            credentials: {
-              accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-              secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-            },
-          },
-        }),
-      ]
-    : [],
+  plugins: [
+    // Always registered (enabled or not) so the admin import map keeps its upload component in every environment.
+    s3Storage({
+      enabled: Boolean(s3Bucket),
+      collections: { media: true },
+      bucket: s3Bucket || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: process.env.S3_REGION || 'auto',
+        // Supabase Storage and most non-AWS providers need path-style URLs.
+        forcePathStyle: true,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
+    }),
+  ],
 })

@@ -1,12 +1,16 @@
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 import { Header } from '@/components/Header'
+import { passwordLoginEnabled } from '@/lib/login'
 import { getDict, getLang, getPayloadClient, getTheme, isEditor, requireUser } from '@/lib/server'
 
 export const dynamic = 'force-dynamic'
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser()
+  // A temporary password (set by a superadmin) must be replaced before using the portal.
+  if (user.mustChangePassword) redirect('/lozinka')
   const lang = await getLang()
   const t = await getDict()
   const theme = await getTheme()
@@ -20,6 +24,7 @@ export default async function PortalLayout({ children }: { children: React.React
         t={t}
         user={{ name: user.name, email: user.email, initials: user.initials || '', avatar, id: user.id }}
         canAdmin={isEditor(user)}
+        canChangePassword={passwordLoginEnabled()}
       />
       <main className="main">{children}</main>
       <footer className="footer">

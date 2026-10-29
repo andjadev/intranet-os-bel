@@ -13,21 +13,29 @@ const secretKey = () => {
 }
 
 export async function createSessionToken(userId: number | string): Promise<string> {
-  return new SignJWT({ uid: String(userId) })
+  // `ms`: issue time in milliseconds (`iat` only has seconds), compared with a password change.
+  return new SignJWT({ uid: String(userId), ms: Date.now() })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(`${SESSION_MAX_AGE}s`)
     .sign(secretKey())
 }
 
-export async function verifySessionToken(token: string | undefined | null): Promise<string | null> {
+/** The user ID and issue time (milliseconds) of a valid session token. */
+export async function readSession(token: string | undefined | null): Promise<{ uid: string; issuedAt: number } | null> {
   if (!token) return null
   try {
     const { payload } = await jwtVerify(token, secretKey(), { algorithms: ['HS256'] })
-    return typeof payload.uid === 'string' ? payload.uid : null
+    if (typeof payload.uid !== 'string') return null
+    const issuedAt = typeof payload.ms === 'number' ? payload.ms : (payload.iat ?? 0) * 1000
+    return { uid: payload.uid, issuedAt }
   } catch {
     return null
   }
+}
+
+export async function verifySessionToken(token: string | undefined | null): Promise<string | null> {
+  return (await readSession(token))?.uid ?? null
 }
 
 export function readCookie(cookieHeader: string | null, name: string): string | undefined {

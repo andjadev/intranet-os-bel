@@ -5,6 +5,7 @@ export const LANG_COOKIE = 'osbel_lang'
 export const THEME_COOKIE = 'osbel_theme'
 export type Theme = 'light' | 'dark'
 export const TIME_ZONE = 'Europe/Belgrade'
+export const MIN_PASSWORD_LENGTH = 10
 
 export const EVENT_TYPES = ['bday', 'slava', 'event', 'food', 'holiday'] as const
 export type EventType = (typeof EVENT_TYPES)[number]

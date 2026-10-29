@@ -662,6 +662,9 @@ a.office-row:hover, button.office-row:hover { background: var(--input); color: v
   height: 46px; justify-content: center; font-size: 14px; width: 100%;
 }
 .login-error { padding: 10px 12px; border-radius: 10px; background: var(--holiday-bg); color: var(--holiday); font-size: 13px; }
+.login-form { display: flex; flex-direction: column; gap: 8px; }
+.login-form .btn { margin-top: 8px; }
+.login-msg { padding: 10px 12px; border-radius: 10px; background: var(--blue-5); color: var(--navy); font-size: 13px; }
 .dev-box { border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; }
 .dev-box select { appearance: auto; }
 

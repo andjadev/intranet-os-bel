@@ -4,6 +4,11 @@ import { SESSION_COOKIE, verifySessionToken } from './lib/session'
 
 const PUBLIC = ['/login', '/auth/', '/_next/', '/favicon']
 
+// Payload's own password endpoints. Sign-in goes through /auth/password (one session cookie for
+// everything); first-register would let anyone create the first user (with any role) on an empty
+// database; there is no e-mail for password resets.
+const BLOCKED_API = ['/api/users/login', '/api/users/first-register', '/api/users/forgot-password', '/api/users/reset-password']
+
 // Portal language cookie (lib/constants LANG_COOKIE) → Payload admin language code.
 const LANG_COOKIE = 'osbel_lang'
 const ADMIN_LANG_COOKIE = 'payload-lng'
@@ -21,6 +26,9 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL('/login?next=/admin', req.url))
   }
   if (pathname === '/admin/logout') return NextResponse.redirect(new URL('/auth/logout', req.url))
+  if (BLOCKED_API.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return new NextResponse('Not found', { status: 404 })
+  }
 
   if (pathname.startsWith('/api/') || PUBLIC.some((p) => pathname.startsWith(p))) return NextResponse.next()
 

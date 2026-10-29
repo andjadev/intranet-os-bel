@@ -15,10 +15,11 @@ type Props = {
   theme: Theme
   t: Dict
   canAdmin: boolean
+  canChangePassword: boolean
   user: { id: number; name: string; email: string; initials: string; avatar: string | null }
 }
 
-export function Header({ lang, theme: initialTheme, t, canAdmin, user }: Props) {
+export function Header({ lang, theme: initialTheme, t, canAdmin, canChangePassword, user }: Props) {
   const pathname = usePathname()
   const router = useRouter()
   const [, startTransition] = useTransition()
@@ -99,6 +100,7 @@ export function Header({ lang, theme: initialTheme, t, canAdmin, user }: Props) 
                 <span>{user.email}</span>
               </div>
               <Link href={`/kolega/${user.id}`}>{t.viewProfile}</Link>
+              {canChangePassword && <Link href="/lozinka">{t.changePassword}</Link>}
               <a href="/auth/logout">{t.logout}</a>
             </div>
           )}

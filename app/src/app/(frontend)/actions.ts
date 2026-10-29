@@ -2,9 +2,11 @@
 
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
-import { LANG_COOKIE, LOCALES, type Lang } from '@/lib/constants'
+import { LANG_COOKIE, LOCALES, MIN_PASSWORD_LENGTH, type Lang } from '@/lib/constants'
 import { pollCounts } from '@/lib/data'
+import { startSession } from '@/lib/login'
 import { getPayloadClient, getUser, isEditor, shortName } from '@/lib/server'
 
 const MAX_TEXT = 1000
@@ -19,6 +21,31 @@ async function authed() {
 export async function setLang(lang: Lang) {
   if (!(LOCALES as readonly string[]).includes(lang)) return
   ;(await cookies()).set(LANG_COOKIE, lang, { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' })
+}
+
+// ---------- password ----------
+
+/** /lozinka form. Checks the current password (with Payload's lockout) before setting the new one. */
+export async function changePassword(form: FormData) {
+  const { user, payload } = await authed()
+  const current = String(form.get('current') ?? '')
+  const next = String(form.get('next') ?? '')
+  const fail = (error: string) => redirect(`/lozinka?error=${error}`)
+
+  if (next.length < MIN_PASSWORD_LENGTH) fail('short')
+  if (next !== String(form.get('repeat') ?? '')) fail('mismatch')
+  if (next === current) fail('same')
+
+  const ok = await payload
+    .login({ collection: 'users', data: { email: user.email, password: current } })
+    .then(() => true)
+    .catch(() => false)
+  if (!ok) fail('wrong')
+
+  // Signs out every other session (sessionsValidAfter), so this device gets a fresh one.
+  await payload.update({ collection: 'users', id: user.id, data: { password: next }, user, overrideAccess: true })
+  await startSession(user)
+  redirect('/lozinka?saved=1')
 }
 
 // ---------- recommendations ----------

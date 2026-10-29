@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { devLoginEnabled, entraConfigured, safeNext } from '@/lib/login'
+import { devLoginEnabled, entraConfigured, passwordLoginEnabled, safeNext } from '@/lib/login'
 import { getDict, getPayloadClient, getUser } from '@/lib/server'
 
 export const dynamic = 'force-dynamic'
@@ -13,6 +13,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const t = await getDict()
   const entra = entraConfigured()
   const dev = devLoginEnabled()
+  const password = passwordLoginEnabled()
 
   // In dev mode, offer the seeded colleagues so roles can be tried quickly.
   const people = dev
@@ -38,6 +39,23 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <p>{t.loginSub}</p>
         {error && <div className="login-error">{error === 'config' ? t.loginNotConfigured : t.loginError}</div>}
 
+        {password && (
+          <form className="login-form" method="post" action="/auth/password">
+            <input type="hidden" name="next" value={next} />
+            <label className="label-caps" htmlFor="login-email">
+              {t.email}
+            </label>
+            <input className="input" id="login-email" name="email" type="email" autoComplete="username" required autoFocus />
+            <label className="label-caps" htmlFor="login-password">
+              {t.password}
+            </label>
+            <input className="input" id="login-password" name="password" type="password" autoComplete="current-password" required />
+            <button className="btn btn-ms" type="submit">
+              {t.signIn}
+            </button>
+          </form>
+        )}
+
         {entra ? (
           <a className="btn btn-ms" href={`/auth/microsoft?next=${encodeURIComponent(next)}`}>
             <svg width="16" height="16" viewBox="0 0 21 21" aria-hidden="true">
@@ -49,7 +67,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             {t.loginMicrosoft}
           </a>
         ) : (
-          <div className="hint">{t.loginNotConfigured}</div>
+          !password && <div className="hint">{t.loginNotConfigured}</div>
         )}
 
         {dev && (

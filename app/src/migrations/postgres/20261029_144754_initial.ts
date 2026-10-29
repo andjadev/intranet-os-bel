@@ -37,6 +37,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"initials" varchar,
   	"role" "enum_users_role" DEFAULT 'employee' NOT NULL,
   	"active" boolean DEFAULT true,
+  	"must_change_password" boolean DEFAULT false,
+  	"sessions_valid_after" timestamp(3) with time zone,
   	"entra_id" varchar,
   	"avatar_id" integer,
   	"department_id" integer,
@@ -46,7 +48,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"birthday" timestamp(3) with time zone,
   	"is_newcomer" boolean,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"reset_password_token" varchar,
+  	"reset_password_expiration" timestamp(3) with time zone,
+  	"salt" varchar,
+  	"hash" varchar,
+  	"reset_password_requested_at" timestamp(3) with time zone,
+  	"login_attempts" numeric DEFAULT 0,
+  	"lock_until" timestamp(3) with time zone
   );
   
   CREATE TABLE "users_locales" (
@@ -420,6 +429,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "users_department_idx" ON "users" USING btree ("department_id");
   CREATE INDEX "users_updated_at_idx" ON "users" USING btree ("updated_at");
   CREATE INDEX "users_created_at_idx" ON "users" USING btree ("created_at");
+  CREATE UNIQUE INDEX "users_email_1_idx" ON "users" USING btree ("email");
   CREATE UNIQUE INDEX "users_locales_locale_parent_id_unique" ON "users_locales" USING btree ("_locale","_parent_id");
   CREATE INDEX "users_locales_parent_id_idx" ON "users_locales" USING btree ("_parent_id");
   CREATE INDEX "users_texts_order_parent" ON "users_texts" USING btree ("order","parent_id");
