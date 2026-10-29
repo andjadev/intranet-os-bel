@@ -102,15 +102,28 @@ docker compose up -d --build
 - Produkcijska baza kreće prazna; sadržaj unosi urednik. (Seed je za razvoj.)
 - Postaviti iza internog reverse proxy-ja sa HTTPS-om; `APP_URL` mora biti javni HTTPS URL.
 
+## Produkcija (Netlify + Supabase, besplatno)
+
+Netlify nema trajni disk, pa SQLite i lokalne slike tamo ne rade. Umesto njih: PostgreSQL i
+S3 skladište iz jednog besplatnog Supabase projekta. Podešavanje builda je u `../netlify.toml`.
+
+1. **Supabase** (supabase.com, besplatan plan): napraviti projekat (region Frankfurt).
+   - *Connect* → **Transaction pooler** URL (port 6543) → `DATABASE_URL`.
+   - *Storage* → novi **privatni** bucket `media` → `S3_BUCKET=media`.
+   - *Storage → S3 Connection*: `S3_ENDPOINT`, `S3_REGION`, pa *New access key* → `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`.
+2. **Netlify**: *Add new project → Import from Git* (GitLab repo). Base directory i build komanda se čitaju iz `netlify.toml`.
+3. **Environment variables** u Netlify-ju: `DATABASE_URL`, `PAYLOAD_SECRET`, `AUTH_SECRET`,
+   `APP_URL=https://<sajt>.netlify.app`, `SUPERADMIN_EMAILS`, `ENABLE_DEV_LOGIN=false`, `ENTRA_*`, `S3_*`.
+4. U Entra app registration dodati redirect URI `https://<sajt>.netlify.app/auth/callback`.
+
+Tabele se kreiraju automatski pri prvom pokretanju (migracija u `src/migrations/postgres/`).
+Besplatan Supabase projekat se pauzira posle 7 dana bez ijednog zahteva; intranet koji se svakodnevno
+koristi to ne dostiže, a pauziran projekat se ponovo pokreće iz Supabase konzole.
+
 ### PostgreSQL (opciono)
 
-Postaviti `DATABASE_URL=postgres://user:pass@host:5432/intranet`, pa jednom generisati migraciju:
-
-```bash
-npm run payload migrate:create initial
-```
-
-Generisani fajlovi idu u `src/migrations/postgres/` i učitavaju se automatski.
+Postaviti `DATABASE_URL=postgres://user:pass@host:5432/intranet`. Početna migracija već postoji u
+`src/migrations/postgres/` i izvršava se automatski pri startu.
 
 ## Promene šeme
 
@@ -118,8 +131,10 @@ Posle izmene kolekcija u `src/collections/`:
 
 ```bash
 npm run generate:types
-npm run payload migrate:create <ime>   # za produkciju
+npm run payload migrate:create <ime>   # za produkciju (SQLite, sa podrazumevanim DATABASE_URL)
 ```
+
+Za Postgres isto sa `DATABASE_URL=postgres://...` (može i nepostojeća baza; migracija se generiše bez konekcije).
 
 U razvoju Payload sam usklađuje šemu lokalne baze.
 

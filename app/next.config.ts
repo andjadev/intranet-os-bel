@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  // Standalone output is for the Docker image; Netlify's Next.js adapter packages the app itself.
+  output: process.env.NETLIFY ? undefined : 'standalone',
   images: {
     localPatterns: [
       {

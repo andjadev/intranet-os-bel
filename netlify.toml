@@ -1,0 +1,11 @@
+# Netlify: the Next.js app lives in app/. Netlify detects Next.js and adds its adapter automatically.
+# Environment variables (DATABASE_URL, secrets, S3_*) are set in the Netlify UI, see app/README.md.
+
+[build]
+  base = "app"
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22.23.4"
+  NEXT_TELEMETRY_DISABLED = "1"

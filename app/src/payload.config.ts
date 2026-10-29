@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { de } from '@payloadcms/translations/languages/de'
 import { en } from '@payloadcms/translations/languages/en'
 import { rsLatin } from '@payloadcms/translations/languages/rsLatin'
@@ -28,6 +29,11 @@ const dirname = path.dirname(filename)
 // SQLite (a single file) by default; set DATABASE_URL=postgres://... to use PostgreSQL.
 const databaseUrl = process.env.DATABASE_URL || 'file:./intranet.db'
 const usePostgres = /^postgres(ql)?:\/\//.test(databaseUrl)
+
+// Uploads go to the local MEDIA_DIR unless an S3-compatible bucket is configured (needed on Netlify,
+// whose functions have no persistent disk). Files are still served through /api/media/file/, so the
+// bucket stays private and Payload's access control applies.
+const s3Bucket = process.env.S3_BUCKET
 
 export default buildConfig({
   serverURL: process.env.APP_URL || '',
@@ -78,7 +84,8 @@ export default buildConfig({
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   db: usePostgres
     ? postgresAdapter({
-        pool: { connectionString: databaseUrl },
+        // Serverless (Netlify): each function instance keeps only a few connections; use a pooler URL.
+        pool: { connectionString: databaseUrl, max: process.env.NETLIFY ? 2 : 10 },
         migrationDir: path.resolve(dirname, 'migrations/postgres'),
         prodMigrations: postgresMigrations,
       })
@@ -88,5 +95,22 @@ export default buildConfig({
         prodMigrations: sqliteMigrations,
       }),
   sharp,
-  plugins: [],
+  plugins: s3Bucket
+    ? [
+        s3Storage({
+          collections: { media: true },
+          bucket: s3Bucket,
+          config: {
+            endpoint: process.env.S3_ENDPOINT,
+            region: process.env.S3_REGION || 'auto',
+            // Supabase Storage and most non-AWS providers need path-style URLs.
+            forcePathStyle: true,
+            credentials: {
+              accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+              secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+            },
+          },
+        }),
+      ]
+    : [],
 })
