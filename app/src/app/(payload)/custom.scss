@@ -1,0 +1,95 @@
+// Payload admin styled like the portal and the company website (C:\os-website):
+// Inter text, Bai Jamjuree headings, navy greys, brand gradient #009FE3 → #007CF0.
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --color-base-0: #ffffff;
+  --color-base-50: #f5f7f9;
+  --color-base-100: #eef3f6;
+  --color-base-150: #e1e8ed;
+  --color-base-200: #d3dde5;
+  --color-base-250: #c5d2dd;
+  --color-base-300: #b8c8d6;
+  --color-base-350: #a1b5c8;
+  --color-base-400: #8aa3ba;
+  --color-base-450: #7891a8;
+  --color-base-500: #6a86a0;
+  --color-base-550: #5f7c97;
+  --color-base-600: #51718f;
+  --color-base-650: #40607f;
+  --color-base-700: #2d4d6e;
+  --color-base-750: #1a3a5c;
+  --color-base-800: #0f2645;
+  --color-base-850: #0a1c36;
+  --color-base-900: #061227;
+  --color-base-950: #040c1c;
+  --color-base-1000: #000000;
+
+  --style-radius-s: 6px;
+  --style-radius-m: 10px;
+  --style-radius-l: 16px;
+}
+
+html[data-theme='light'] {
+  --theme-bg: #f5f7f9;
+  --theme-input-bg: #fafbfc;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Bai Jamjuree', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.btn--style-primary:not(.btn--disabled) {
+  --bg-color: #007cf0;
+  --hover-bg: #0063c4;
+  --color: #ffffff;
+  --hover-color: #ffffff;
+  background: linear-gradient(90deg, #009fe3, #007cf0);
+  box-shadow: 0 10px 24px -8px rgba(0, 124, 240, 0.55);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline-color: #007cf0;
+}
+
+// Dark navy left navigation, like the website header.
+.nav {
+  background: #061227;
+  color: #e1e8ed;
+
+  .nav__link, .nav-group__toggle, .nav__link-label, .nav-group__label {
+    color: rgba(225, 232, 237, 0.82);
+  }
+  .nav__link:hover .nav__link-label, .nav-group__toggle:hover { color: #ffffff; }
+  .nav__link.active .nav__link-label, .nav__link--active .nav__link-label { color: #54bff0; }
+}
+
+.osbel-home-link {
+  margin-bottom: 12px;
+  font-weight: 600;
+  .nav__link-label { color: #54bff0 !important; }
+}
+
+.osbel-home-action {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #009fe3, #007cf0);
+  box-shadow: 0 10px 24px -8px rgba(0, 124, 240, 0.55);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    color: #ffffff;
+    filter: brightness(1.06);
+  }
+}

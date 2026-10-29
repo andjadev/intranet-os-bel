@@ -1,0 +1,19 @@
+# docker compose up -d --build
+# Put it behind the company reverse proxy (nginx/IIS) with HTTPS; reachable only internally/VPN.
+services:
+  intranet:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file: .env
+    environment:
+      # Overrides the local-dev value from .env
+      DATABASE_URL: file:/app/data/intranet.db
+      MEDIA_DIR: /app/data/media
+      ENABLE_DEV_LOGIN: 'false'
+    volumes:
+      - intranet-data:/app/data
+
+volumes:
+  intranet-data:

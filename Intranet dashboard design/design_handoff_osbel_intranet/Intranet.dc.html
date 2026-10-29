@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #F5F6F8; font-family: 'Manrope', system-ui, sans-serif; color: #2A2F35; -webkit-font-smoothing: antialiased; }
+  a { color: #003366; text-decoration: none; }
+  a:hover { color: #001F40; }
+  button, input { font-family: inherit; }
+  ::selection { background: #D6E7F5; }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-thumb { background: #D5DAE1; border-radius: 8px; }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #F5F6F8;">
+  {{ seasonLayer }}
+
+  <header style="position: sticky; top: 0; z-index: 30; background: rgba(245,246,248,.86); backdrop-filter: blur(10px); border-bottom: 1px solid #E2E5EA;">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px;">
+      <a href="#" onClick="{{ goHome }}" style="display: flex; align-items: center; gap: 10px; color: #2A2F35;">
+        <span style="width: 30px; height: 30px; border-radius: 9px; background: #4A7FB5; color: #FFFFFF; display: grid; place-items: center; font-size: 14px; font-weight: 700; letter-spacing: -.5px;">os</span>
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; letter-spacing: -.2px;">{{ t.intranet }}</span>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; min-width: 0;">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.onClick }}" style="{{ n.style }}">{{ n.label }}</button>
+        </sc-for>
+      </nav>
+      <div style="flex: 1; min-width: 0;"></div>
+      <div style="display: flex; align-items: center; gap: 2px; border: 1px solid #DCE0E6; border-radius: 999px; padding: 3px; background: #FFFFFF;">
+        <sc-for list="{{ langBtns }}" as="lb" hint-placeholder-count="3">
+          <button onClick="{{ lb.onClick }}" style="{{ lb.style }}">{{ lb.label }}</button>
+        </sc-for>
+      </div>
+      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 999px; background: #4A7FB5; color: #FFFFFF; font-size: 14px; font-weight: 600; white-space: nowrap; flex: 0 0 auto;" style-hover="background: #3D6E9F; color: #fff">
+        {{ t.portal }}
+        <span style="font-size: 15px; line-height: 1;">&#8599;</span>
+      </a>
+      <div style="width: 34px; height: 34px; border-radius: 50%; background: #E4E8EE; color: #5A6067; display: grid; place-items: center; font-size: 12px; font-weight: 700;">SĐ</div>
+    </div>
+  </header>
+
+  <main style="max-width: 1320px; margin: 0 auto; padding: 32px 32px 80px;">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; margin-bottom: 4px;">
+        <div>
+          <p style="margin: 0 0 6px; font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: #8A9098;">{{ todayLabel }}</p>
+          <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: 44px; line-height: 1.05; font-weight: 400; letter-spacing: -.5px; color: #1F2429;">{{ t.homeTitle }}</h1>
+        </div>
+        <p style="margin: 0; max-width: 340px; font-size: 13px; line-height: 1.5; color: #6B7178; text-wrap: pretty;">{{ t.homeSub }}</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch;">
+
+        <section style="flex: 2 1 600px; min-width: 0; background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(20,20,20,.03);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px;">
+            <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+              <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: 26px; font-weight: 400; color: #1F2429;">{{ t.weekTitle }}</h2>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <button onClick="{{ prevMonth }}" style="width: 30px; height: 30px; border: 1px solid #DCE0E6; border-radius: 8px; background: #FFFFFF; color: #474C53; font-size: 15px; cursor: pointer;" style-hover="border-color: #003366; color: #003366">&#8249;</button>
+              <span style="min-width: 130px; text-align: center; font-size: 14px; font-weight: 700; color: #1F2429;">{{ monthLabel }}</span>
+              <button onClick="{{ nextMonth }}" style="width: 30px; height: 30px; border: 1px solid #DCE0E6; border-radius: 8px; background: #FFFFFF; color: #474C53; font-size: 15px; cursor: pointer;" style-hover="border-color: #003366; color: #003366">&#8250;</button>
+              <button onClick="{{ goToday }}" style="height: 30px; margin-left: 4px; padding: 0 12px; border: 1px solid #DCE0E6; border-radius: 8px; background: #FFFFFF; color: #4A7FB5; font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="border-color: #003366">{{ t.today }}</button>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;">
+            <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="5">
+              <span style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #6B7178;">
+                <span style="{{ lg.iconStyle }}">
+                        <sc-if value="{{ lg.isBday }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 13.5h11v-5h-11z M4 8.5v-2h8v2 M8 6.5v-2.5"></path><path d="M8 1.8v.4"></path></svg></sc-if>
+                        <sc-if value="{{ lg.isSlava }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7h3v7h-3z"></path><path d="M8 1.5c1.2 1.4 1.2 2.6 0 3.5c-1.2-.9-1.2-2.1 0-3.5z"></path></svg></sc-if>
+                        <sc-if value="{{ lg.isEvent }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v10h-11z M2.5 6.5h11 M5.5 2v2.5 M10.5 2v2.5"></path></svg></sc-if>
+                        <sc-if value="{{ lg.isOffice }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></sc-if>
+                        <sc-if value="{{ lg.isHoliday }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14.5v-12 M4 3h8l-2 3 2 3h-8"></path></svg></sc-if>
+                      </span>
+                {{ lg.label }}
+              </span>
+            </sc-for>
+            <span style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #6B7178;">
+              <span style="width: 16px; height: 10px; border-radius: 3px; background: #003366;"></span>
+              {{ t.thisWeek }}
+            </span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 1px; background: #D5DAE1; border: 1px solid #D5DAE1; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; background: #D5DAE1;">
+              <sc-for list="{{ wdays }}" as="wd" hint-placeholder-count="7">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: #474C53; padding: 8px; background: #EEF1F5;">{{ wd }}</span>
+              </sc-for>
+            </div>
+            <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="5">
+              <div style="{{ w.style }}">
+                <sc-for list="{{ w.days }}" as="d" hint-placeholder-count="7">
+                  <button onClick="{{ d.onClick }}" style="{{ d.style }}" style-hover="box-shadow: inset 0 0 0 2px #A3C6E6">
+                    <span style="{{ d.numStyle }}">{{ d.num }}</span>
+                    <sc-for list="{{ d.items }}" as="it" hint-placeholder-count="1">
+                      <span style="display: flex; align-items: center; gap: 4px; min-width: 0;">
+                        <span style="{{ it.iconStyle }}">
+                        <sc-if value="{{ it.isBday }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 13.5h11v-5h-11z M4 8.5v-2h8v2 M8 6.5v-2.5"></path><path d="M8 1.8v.4"></path></svg></sc-if>
+                        <sc-if value="{{ it.isSlava }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7h3v7h-3z"></path><path d="M8 1.5c1.2 1.4 1.2 2.6 0 3.5c-1.2-.9-1.2-2.1 0-3.5z"></path></svg></sc-if>
+                        <sc-if value="{{ it.isEvent }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v10h-11z M2.5 6.5h11 M5.5 2v2.5 M10.5 2v2.5"></path></svg></sc-if>
+                        <sc-if value="{{ it.isOffice }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></sc-if>
+                        <sc-if value="{{ it.isHoliday }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14.5v-12 M4 3h8l-2 3 2 3h-8"></path></svg></sc-if>
+                      </span>
+                        <span style="font-size: 11px; line-height: 1.25; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;">{{ it.short }}</span>
+                      </span>
+                    </sc-for>
+                    <sc-if value="{{ d.hasMore }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size: 10px; font-weight: 700; color: #4A7FB5; padding-left: 2px;">{{ d.more }}</span>
+                    </sc-if>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top: 1px solid #EAEDF1; padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #8A9098;">{{ selLabel }}</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <sc-for list="{{ selItems }}" as="it" hint-placeholder-count="2">
+              <span style="{{ it.cardStyle }}">
+                <span style="{{ it.iconStyle }}">
+                        <sc-if value="{{ it.isBday }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 13.5h11v-5h-11z M4 8.5v-2h8v2 M8 6.5v-2.5"></path><path d="M8 1.8v.4"></path></svg></sc-if>
+                        <sc-if value="{{ it.isSlava }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7h3v7h-3z"></path><path d="M8 1.5c1.2 1.4 1.2 2.6 0 3.5c-1.2-.9-1.2-2.1 0-3.5z"></path></svg></sc-if>
+                        <sc-if value="{{ it.isEvent }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v10h-11z M2.5 6.5h11 M5.5 2v2.5 M10.5 2v2.5"></path></svg></sc-if>
+                        <sc-if value="{{ it.isOffice }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></sc-if>
+                        <sc-if value="{{ it.isHoliday }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14.5v-12 M4 3h8l-2 3 2 3h-8"></path></svg></sc-if>
+                      </span>
+                <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                  <span style="font-size: 11px; font-weight: 700; color: #003366; line-height: 16px;">{{ it.time }}</span>
+                  <span style="font-size: 13px; line-height: 1.4; color: #1F2429; font-weight: 600;">{{ it.text }}</span>
+                  <span style="font-size: 12px; color: #80868E;">{{ it.who }}</span>
+                </span>
+              </span>
+            </sc-for>
+            </div>
+            <sc-if value="{{ selEmpty }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 13px; color: #80868E;">{{ t.nothing }}</span>
+            </sc-if>
+          </div>
+        </section>
+
+        <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px;">
+          <sc-if value="{{ showNewcomer }}" hint-placeholder-val="{{ false }}">
+          <section style="background: #EEF5FB; border: 1px solid #CFE1F2; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; color: #003366;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: 0 0 auto; color: #003366; background: #DCEAF6;">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2.5c2-1 4-1 4-1s0 2-1 4L9 9 7 7z"></path><path d="M7 7 4.5 6.5 3 8l2.5 1 M9 9l.5 2.5L8 13l-1-2.5"></path><path d="M5.5 10.5c-1 .3-2 1.5-2 3c1.5 0 2.7-1 3-2"></path></svg>
+              </span>
+              <span style="flex: 1 1 auto; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #3D73A8;">{{ newcomerTitle }}</span>
+              <sc-if value="{{ multiNew }}" hint-placeholder-val="{{ false }}">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  <sc-for list="{{ newDots }}" as="dot" hint-placeholder-count="3">
+                    <button onClick="{{ dot.onClick }}" style="{{ dot.style }}"></button>
+                  </sc-for>
+                </span>
+              </sc-if>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <button onClick="{{ newcomer.onOpen }}" style="display: flex; align-items: center; gap: 12px; flex: 1 1 auto; min-width: 0; padding: 0; border: 0; background: transparent; cursor: pointer; text-align: left; font-family: inherit;" style-hover="opacity: .85">
+                <span style="width: 42px; height: 42px; border-radius: 50%; background: #FFFFFF; color: #003366; border: 1px solid #CFE1F2; display: grid; place-items: center; font-family: 'Instrument Serif', Georgia, serif; font-size: 17px; flex: 0 0 auto;">{{ newcomer.initials }}</span>
+                <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                  <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 20px; line-height: 1.1; color: #003366; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ newcomer.greeting }}</span>
+                  <span style="font-size: 12px; color: #3D73A8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ newcomer.role }}</span>
+                </span>
+              </button>
+              <sc-if value="{{ multiNew }}" hint-placeholder-val="{{ false }}">
+                <span style="display: flex; gap: 4px; flex: 0 0 auto;">
+                  <button onClick="{{ prevNew }}" title="Prev" style="width: 28px; height: 28px; border: 1px solid #A3C6E6; border-radius: 999px; background: #FFFFFF; color: #003366; font-size: 15px; line-height: 1; cursor: pointer;" style-hover="background: #DCEAF6">&#8249;</button>
+                  <button onClick="{{ nextNew }}" title="Next" style="width: 28px; height: 28px; border: 1px solid #A3C6E6; border-radius: 999px; background: #FFFFFF; color: #003366; font-size: 15px; line-height: 1; cursor: pointer;" style-hover="background: #DCEAF6">&#8250;</button>
+                </span>
+              </sc-if>
+            </div>
+          </section>
+          </sc-if>
+
+          <section style="flex: 0 0 auto; background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(20,20,20,.03);">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #1F2429;">
+              <span style="width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: 0 0 auto; color: #003366; background: #DCEAF6;">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7.5a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5z M2 13.5c0-2.3 2-4 4.5-4c1 0 1.8.2 2.5.6"></path><path d="M11.8 13.2a1.9 1.9 0 1 0 0-3.8a1.9 1.9 0 0 0 0 3.8z M13.2 12.6l1.3 1.3"></path></svg>
+              </span>
+              {{ t.searchEmployee }}
+            </h2>
+            <div style="position: relative;">
+              <input value="{{ sq }}" onChange="{{ onSq }}" onKeyDown="{{ onSqKey }}" placeholder="{{ t.searchPlaceholder }}" style="width: 100%; box-sizing: border-box; height: 42px; padding: 0 40px 0 14px; border: 1px solid #DCE0E6; border-radius: 10px; background: #FAFBFC; font-size: 14px; color: #2A2F35; outline: none;" style-focus="border-color: #003366; background: #FFFFFF">
+              <sc-if value="{{ hasSq }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ clearSq }}" title="{{ t.clear }}" style="position: absolute; right: 6px; top: 6px; width: 30px; height: 30px; border: 0; border-radius: 8px; background: transparent; color: #80868E; font-size: 18px; line-height: 1; cursor: pointer;" style-hover="background: #EEF1F5">&#215;</button>
+              </sc-if>
+              <sc-if value="{{ showSuggest }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; left: 0; right: 0; top: 46px; z-index: 20; display: flex; flex-direction: column; border: 1px solid #DCE0E6; border-radius: 10px; overflow: hidden; background: #FFFFFF; box-shadow: 0 8px 24px rgba(20,30,50,.12);">
+                <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="3">
+                  <button onClick="{{ s.onPick }}" style="{{ s.style }}" style-hover="background: #EEF1F5">
+                    <span style="font-size: 13px; font-weight: 600; color: #1F2429;">{{ s.name }}</span>
+                    <span style="font-size: 12px; color: #989EA6;">{{ s.hint }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+              <sc-if value="{{ showNoHits }}" hint-placeholder-val="{{ false }}">
+              <span style="position: absolute; left: 0; right: 0; top: 46px; z-index: 20; padding: 10px 12px; border: 1px solid #DCE0E6; border-radius: 10px; background: #FFFFFF; box-shadow: 0 8px 24px rgba(20,30,50,.12); font-size: 12px; color: #80868E;">{{ t.noHits }}</span>
+            </sc-if>
+            </div>
+            <sc-if value="{{ showHint }}" hint-placeholder-val="{{ true }}">
+              <span style="font-size: 12px; color: #80868E;">{{ t.searchHint }}</span>
+            </sc-if>
+            
+            
+            
+          </section>
+          <section style="flex: 1 1 auto; background: #DCEAF6; border: 1px solid #A3C6E6; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #003366;">
+                <span style="width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: 0 0 auto; color: #FFFFFF; background: #003366;">
+                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 14.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13z M8 7.5v4 M8 4.8v.1"></path></svg>
+                </span>
+                {{ t.usefulTitle }}
+              </h2>
+              <a href="#" onClick="{{ goUseful }}" style="font-size: 12px; font-weight: 700; color: #003366;" style-hover="color: #3D73A8">{{ t.allLinks }} &#8594;</a>
+            </div>
+            <div style="flex: 1 1 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 8px;">
+              <sc-for list="{{ usefulTiles }}" as="u" hint-placeholder-count="4">
+                <a href="#" style="{{ u.style }}" style-hover="transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,51,102,.22); text-decoration: none">
+                  <span style="width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: rgba(255,255,255,.22); color: inherit;">
+                    <sc-if value="{{ u.i0 }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3.5h10v9H3z M3 6.5h10 M6 9.5h4"></path></svg></sc-if>
+                    <sc-if value="{{ u.i1 }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2 M3.5 7h9v6.5h-9z M8 9.5v1.5"></path></svg></sc-if>
+                    <sc-if value="{{ u.i2 }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 14s-5-3-5-7a3 3 0 0 1 5-2a3 3 0 0 1 5 2c0 4-5 7-5 7z"></path></svg></sc-if>
+                    <sc-if value="{{ u.i3 }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4h11v9.5h-11z M2.5 7h11 M5.5 2.5v3 M10.5 2.5v3 M6 10l1.3 1.3L10 9"></path></svg></sc-if>
+                    <sc-if value="{{ u.i4 }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h12v7H2z M2 7.5h12 M4.5 10h2"></path></svg></sc-if>
+                    <sc-if value="{{ u.i5 }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2l6 11H2z M8 6.5v3 M8 11.3v.1"></path></svg></sc-if>
+                  </span>
+                  <span style="font-size: 13px; font-weight: 700; line-height: 1.3; text-wrap: pretty;">{{ u.title }}</span>
+                </a>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; align-items: stretch;">
+
+        <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(20,20,20,.03);">
+          <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #1F2429;">
+            <span style="width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: 0 0 auto; color: #003366; background: #DCEAF6;"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 14.5v-8l5.5-4 5.5 4v8z M6.5 14.5v-4h3v4"></path></svg></span>
+            {{ t.officeTitle }}
+          </h2>
+          <div style="display: flex; flex-direction: column;">
+            
+            <button onClick="{{ nextFood.onClick }}" style="display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 12px; margin: 0 0 8px; padding: 10px 12px; border-radius: 10px; background: #F8F2EA; border: 1px solid #EADFCF; color: #1F2429; text-align: left; cursor: pointer; font-family: inherit;" style-hover="background: #F3EADF; border-color: #8A6134">
+              <span style="width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: #FFFFFF; background: #8A6134;"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700;">{{ nextFood.title }}</span>
+                <span style="font-size: 12px; color: #80868E;">{{ nextFood.where }}</span>
+              </span>
+              <span style="font-size: 12px; font-weight: 700; color: #7A5429; white-space: nowrap;">{{ nextFood.when }}</span>
+            </button>
+            <button onClick="{{ goAds }}" style="display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 12px; text-align: left; padding: 12px 0; border: 0; border-top: 1px solid #EAEDF1; background: transparent; cursor: pointer; font-family: inherit;" style-hover="background: #FAFBFC">
+              <span style="width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: #003366; background: #DCEAF6;"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5 8 2h5.5v5.5L8 13z M10.5 5.5v.1"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700; color: #1F2429;">{{ t.adsTitle }}</span>
+                <span style="display: flex; flex-wrap: wrap; gap: 4px;">
+                  <sc-for list="{{ adCats }}" as="c" hint-placeholder-count="4">
+                    <span style="font-size: 11px; font-weight: 600; color: #3D73A8; background: #EEF5FB; padding: 2px 8px; border-radius: 999px;">{{ c.label }}</span>
+                  </sc-for>
+                </span>
+              </span>
+              <span style="font-size: 12px; font-weight: 700; color: #003366; white-space: nowrap;">{{ adsCount }}</span>
+            </button>
+            <button onClick="{{ goGallery }}" style="display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 12px; text-align: left; padding: 12px 0; border: 0; border-top: 1px solid #EAEDF1; background: transparent; cursor: pointer; font-family: inherit;" style-hover="background: #FAFBFC">
+              <span style="width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: #2F6B47; background: #E3EFE7;"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v9h-11z M2.5 10.5l3-3 3 3 2-2 3 3 M10.5 5.5a.9.9 0 1 0 0 1.8a.9.9 0 0 0 0-1.8z"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700; color: #1F2429;">{{ gt.title }}</span>
+                <span style="display: flex; flex-wrap: wrap; gap: 4px;">
+                  <sc-for list="{{ galChips }}" as="c" hint-placeholder-count="3">
+                    <span style="font-size: 11px; font-weight: 600; color: #2F6B47; background: #EEF5F0; padding: 2px 8px; border-radius: 999px;">{{ c.label }}</span>
+                  </sc-for>
+                </span>
+              </span>
+              <span style="font-size: 12px; font-weight: 700; color: #003366; white-space: nowrap;">{{ galCount }}</span>
+            </button>
+            <a href="tel:+381641234567" style="display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #EAEDF1; color: #1F2429; text-decoration: none;" style-hover="background: #FAFBFC; text-decoration: none">
+              <span style="width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: #8A6134; background: #F3EADF;"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.5a3 3 0 0 0-2.8 4L2.5 11.2l2.3 2.3 4.7-4.7A3 3 0 0 0 13.5 6l-1.8 1.8-1.5-.4-.4-1.5L11.6 4A3 3 0 0 0 10 2.5z"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700;">{{ t.handyman }}</span>
+                <span style="font-size: 12px; color: #80868E;">{{ t.handymanSub }}</span>
+              </span>
+              <span style="font-size: 12px; font-weight: 700; color: #003366; white-space: nowrap;">064 123 4567</span>
+            </a>
+            <div style="display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; gap: 12px; padding: 12px 0 0; border-top: 1px solid #EAEDF1;">
+              <span style="width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: #003366; background: #DCEAF6;"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 14V8.5h9V14 M8 8.5V5 M6 5h4 M2.5 14h11"></path><path d="M6.5 11.5v-1.2a1.5 1.5 0 0 1 3 0v1.2"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700; color: #1F2429;">{{ t.parking }}</span>
+                <span style="font-size: 12px; line-height: 1.4; color: #474C53; text-wrap: pretty;">{{ t.parkingNote }}</span>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(20,20,20,.03);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: 0 0 auto; color: #FFFFFF; background: #8A6134;"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v7.5h-6l-3 2.5v-2.5h-2z"></path></svg></span>
+            <span style="display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto;">
+              <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: #1F2429;">OSBEL Chat</h2>
+              <span style="font-size: 12px; color: #80868E;">{{ t.teamsSub }}</span>
+            </span>
+            <a href="#" target="_blank" style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid #E6D5C0; background: #F8F2EA; color: #7A5429; font-size: 11px; font-weight: 700; text-decoration: none; white-space: nowrap;" style-hover="border-color: #8A6134; color: #5C4020; text-decoration: none">{{ t.openTeams }} &#8599;</a>
+          </div>
+          <div ref="{{ chatRef }}" style="flex: 1 1 0; min-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; background: #F8F2EA; border: 1px solid #EADFCF;">
+            <sc-for list="{{ chatList }}" as="m" hint-placeholder-count="5">
+              <div style="display: flex; flex-direction: column;">
+                <sc-if value="{{ m.isSystem }}" hint-placeholder-val="{{ false }}">
+                  <span style="align-self: center; max-width: 90%; padding: 4px 10px; border-radius: 999px; background: #EADFCF; color: #5C4020; font-size: 11px; font-weight: 600; text-align: center;">{{ m.text }} &#183; {{ m.time }}</span>
+                </sc-if>
+                <sc-if value="{{ m.isOther }}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; align-items: flex-end; gap: 8px; max-width: 88%;">
+                    <span style="width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 auto; background: #F3EADF; color: #8A6134; font-size: 10px; font-weight: 700;">{{ m.initials }}</span>
+                    <span style="display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; border-radius: 12px 12px 12px 4px; background: #FFFFFF; border: 1px solid #EADFCF;">
+                      <span style="display: flex; align-items: baseline; gap: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #7A5429;">{{ m.name }}</span>
+                        <span style="font-size: 10px; color: #989EA6;">{{ m.time }}</span>
+                      </span>
+                      <span style="font-size: 13px; line-height: 1.4; color: #1F2429; text-wrap: pretty;">{{ m.text }}</span>
+                    </span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.isMe }}" hint-placeholder-val="{{ false }}">
+                  <span style="align-self: flex-end; max-width: 80%; display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; border-radius: 12px 12px 4px 12px; background: #003366; color: #FFFFFF;">
+                    <span style="font-size: 13px; line-height: 1.4; text-wrap: pretty;">{{ m.text }}</span>
+                    <span style="align-self: flex-end; font-size: 10px; color: #A3C6E6;">{{ m.time }}</span>
+                  </span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input value="{{ chatDraft }}" onChange="{{ onChatDraft }}" onKeyDown="{{ onChatKey }}" placeholder="{{ t.chatPlaceholder }}" style="flex: 1 1 auto; min-width: 0; height: 40px; padding: 0 14px; border: 1px solid #DCE0E6; border-radius: 10px; background: #FAFBFC; font-size: 13px; color: #2A2F35; outline: none;" style-focus="border-color: #8A6134; background: #FFFFFF">
+            <button onClick="{{ onChatSend }}" title="{{ t.send }}" style="flex: 0 0 auto; height: 40px; padding: 0 14px; border: 0; border-radius: 10px; background: #8A6134; color: #FFFFFF; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px;" style-hover="background: #6E4C27">{{ t.send }} <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8h10 M9 4.5 12.5 8 9 11.5"></path></svg></button>
+          </div>
+        </section>
+
+        
+
+        <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(20,20,20,.03);">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #1F2429;">
+              <span style="width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; flex: 0 0 auto; color: #003366; background: #DCEAF6;"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.8l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.6l-3.8 2 .7-4.3-3.1-3 4.3-.6z"></path></svg></span>
+              {{ t.recsTitle }}
+            </h2>
+            <a href="#" onClick="{{ goRecs }}" style="font-size: 12px; font-weight: 600; white-space: nowrap; flex: 0 0 auto;">{{ t.more }} &#8594;</a>
+          </div>
+          <div style="flex: 1 1 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 8px;">
+            <sc-for list="{{ rcHome }}" as="c" hint-placeholder-count="3">
+              <button onClick="{{ c.onClick }}" style="display: flex; flex-direction: column; gap: 6px; min-width: 0; text-align: left; padding: 12px; border-radius: 12px; border: 1px solid #E2E5EA; background: #FAFBFC; cursor: pointer; font-family: inherit;" style-hover="border-color: #003366; background: #FFFFFF">
+                <span style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                  <span style="{{ c.iconStyle }}"><sc-if value="{{ c.is_culture }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h12v2a1.5 1.5 0 0 0 0 3v2H2v-2a1.5 1.5 0 0 0 0-3z M9.5 5v7"></path></svg></sc-if><sc-if value="{{ c.is_weekend }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 13.5 6 6l3 4.5 2-3 3.5 6z M11.5 3a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3z"></path></svg></sc-if><sc-if value="{{ c.is_gastro }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></sc-if></span>
+                  <span style="font-size: 11px; font-weight: 700; color: #80868E;">{{ c.count }}</span>
+                </span>
+                <span style="font-size: 14px; font-weight: 700; color: #1F2429;">{{ c.label }}</span>
+                <span style="font-size: 11px; line-height: 1.4; color: #80868E;">{{ c.subs }}</span>
+                <span style="margin-top: 2px; padding-top: 8px; border-top: 1px solid #EAEDF1; font-size: 12px; line-height: 1.35; color: #474C53;">{{ c.latest }}</span>
+              </button>
+            </sc-for>
+            <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 12px; border-radius: 12px; border: 1px solid #CFE1F2; background: #EEF5FB;">
+              <span style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                <span style="width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: #FFFFFF; background: #003366;"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13.5V8 M8 13.5V3 M13 13.5V6"></path></svg></span>
+                <span style="font-size: 11px; font-weight: 700; color: #3D73A8;">{{ poll.total }}</span>
+              </span>
+              <span style="font-size: 13px; font-weight: 700; line-height: 1.3; color: #1F2429;">{{ poll.q }}</span>
+              <sc-for list="{{ poll.opts }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.onClick }}" style="{{ o.style }}">
+                  <span style="{{ o.barStyle }}"></span>
+                  <span style="{{ o.textStyle }}">{{ o.label }}</span>
+                  <span style="position: relative; font-size: 11px; font-weight: 700; color: #003366;">{{ o.pct }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isPerson }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button onClick="{{ goHome }}" style="margin-bottom: 18px; padding: 0; border: 0; background: transparent; color: #003366; font-size: 13px; font-weight: 600; cursor: pointer;">{{ t.back }}</button>
+      <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; align-items: start;">
+        <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 22px;">
+          <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="width: 84px; height: 84px; border-radius: 50%; background: #DCEAF6; color: #003366; display: grid; place-items: center; font-family: 'Instrument Serif', Georgia, serif; font-size: 30px; flex: 0 0 auto;">{{ person.initials }}</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; font-weight: 400; color: #1F2429;">{{ person.name }}</h1>
+              <span style="font-size: 14px; color: #474C53;">{{ person.role }}</span>
+              <span style="font-size: 13px; color: #80868E;">{{ person.deptLine }}</span>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; border-top: 1px solid #EAEDF1; padding-top: 20px;">
+            <sc-for list="{{ person.facts }}" as="f" hint-placeholder-count="4">
+              <span style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #8A9098;">{{ f.label }}</span>
+                <span style="font-size: 14px; color: #1F2429;">{{ f.value }}</span>
+              </span>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #EAEDF1; padding-top: 20px;">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #8A9098;">{{ t.helpWith }}</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <sc-for list="{{ person.skills }}" as="s" hint-placeholder-count="3">
+                <span style="padding: 6px 12px; border-radius: 999px; background: #EEF1F5; font-size: 12px; font-weight: 600; color: #474C53;">{{ s.label }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px;">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 700; color: #1F2429;">{{ t.sameTeam }}</h2>
+          <sc-for list="{{ teamMates }}" as="p" hint-placeholder-count="3">
+            <button onClick="{{ p.onOpen }}" style="display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 12px; text-align: left; padding: 8px; margin: 0 -8px; border: 0; border-radius: 10px; background: transparent; cursor: pointer;" style-hover="background: #EEF1F5">
+              <span style="width: 34px; height: 34px; border-radius: 50%; background: #DCEAF6; color: #003366; display: grid; place-items: center; font-size: 11px; font-weight: 700;">{{ p.initials }}</span>
+              <span style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 13px; font-weight: 600; color: #1F2429;">{{ p.name }}</span>
+                <span style="font-size: 12px; color: #80868E;">{{ p.role }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </section>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isHomemade }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button onClick="{{ goHome }}" style="margin-bottom: 18px; padding: 0; border: 0; background: transparent; color: #003366; font-size: 13px; font-weight: 600; cursor: pointer;">{{ t.back }}</button>
+      <h1 style="margin: 0 0 8px; font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; font-weight: 400; color: #1F2429;">{{ t.homemadeTitle }}</h1>
+      <p style="margin: 0 0 28px; max-width: 620px; font-size: 14px; line-height: 1.55; color: #6B7178; text-wrap: pretty;">{{ t.homemadeSub }}</p>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+        <sc-for list="{{ homemade }}" as="h" hint-placeholder-count="6">
+          <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #8A6134;">{{ h.tag }}</span>
+            <span style="font-size: 17px; font-weight: 600; line-height: 1.3; color: #1F2429;">{{ h.title }}</span>
+            <span style="font-size: 13px; line-height: 1.5; color: #6B7178;">{{ h.note }}</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; padding-top: 14px; border-top: 1px solid #EAEDF1;">
+              <button onClick="{{ h.onSeller }}" style="display: flex; align-items: center; gap: 8px; padding: 0; border: 0; background: transparent; cursor: pointer;" style-hover="opacity: .7">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #DCEAF6; color: #003366; display: grid; place-items: center; font-size: 10px; font-weight: 700;">{{ h.initials }}</span>
+                <span style="font-size: 13px; font-weight: 600; color: #1F2429;">{{ h.seller }}</span>
+              </button>
+              <span style="font-size: 14px; font-weight: 700; color: #003366;">{{ h.price }}</span>
+            </div>
+          </section>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isJobs }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button onClick="{{ goHome }}" style="margin-bottom: 18px; padding: 0; border: 0; background: transparent; color: #003366; font-size: 13px; font-weight: 600; cursor: pointer;">{{ t.back }}</button>
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; margin-bottom: 24px;">
+        <div>
+          <h1 style="margin: 0 0 8px; font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; font-weight: 400; color: #1F2429;">{{ t.jobsTitle }}</h1>
+          <p style="margin: 0; max-width: 620px; font-size: 14px; line-height: 1.55; color: #6B7178;">{{ t.jobsSub }}</p>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <sc-for list="{{ jobFilters }}" as="f" hint-placeholder-count="4">
+            <button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ jobsList }}" as="j" hint-placeholder-count="4">
+          <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 17px; font-weight: 600; color: #1F2429;">{{ j.title }}</span>
+              <span style="font-size: 13px; color: #80868E;">{{ j.meta }}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <span style="font-size: 12px; font-weight: 600; color: #8A6134; background: #F3EADF; padding: 6px 12px; border-radius: 999px; white-space: nowrap;">{{ j.bonus }}</span>
+              <a href="#" style="display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 999px; background: #4A7FB5; color: #FFFFFF; font-size: 13px; font-weight: 700; white-space: nowrap;" style-hover="background: #3D6E9F; color: #fff">{{ t.refer }}</a>
+            </div>
+          </section>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isUseful }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button onClick="{{ goHome }}" style="margin-bottom: 18px; padding: 0; border: 0; background: transparent; color: #003366; font-size: 13px; font-weight: 600; cursor: pointer;">{{ t.back }}</button>
+      <h1 style="margin: 0 0 8px; font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; font-weight: 400; color: #1F2429;">{{ t.usefulTitle }}</h1>
+      <p style="margin: 0 0 28px; max-width: 620px; font-size: 14px; line-height: 1.55; color: #6B7178;">{{ t.usefulPageSub }}</p>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start;">
+        <sc-for list="{{ usefulGroups }}" as="g" hint-placeholder-count="3">
+          <section style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px;">
+            <h2 style="margin: 0 0 6px; font-size: 13px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #8A9098;">{{ g.title }}</h2>
+            <sc-for list="{{ g.links }}" as="l" hint-placeholder-count="4">
+              <a href="#" style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid #EAEDF1; color: #1F2429;" style-hover="color: #003366">
+                <span style="display: flex; flex-direction: column; gap: 2px;">
+                  <span style="font-size: 14px; font-weight: 600;">{{ l.title }}</span>
+                  <span style="font-size: 12px; color: #80868E;">{{ l.meta }}</span>
+                </span>
+                <span style="font-size: 13px; color: #989EA6;">&#8599;</span>
+              </a>
+            </sc-for>
+          </section>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isGallery }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button onClick="{{ galBack }}" style="margin-bottom: 18px; padding: 0; border: 0; background: transparent; color: #003366; font-size: 13px; font-weight: 600; cursor: pointer;">{{ galBackLabel }}</button>
+      <h1 style="margin: 0 0 8px; font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; font-weight: 400; color: #1F2429;">{{ galHeading }}</h1>
+      <p style="margin: 0 0 24px; max-width: 620px; font-size: 14px; line-height: 1.55; color: #6B7178;">{{ galSub }}</p>
+      <sc-if value="{{ galShowFolders }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 20px;">
+          <sc-for list="{{ galFolders }}" as="g" hint-placeholder-count="5">
+            <button onClick="{{ g.onClick }}" style="display: flex; flex-direction: column; gap: 12px; padding: 10px 10px 14px; text-align: left; border-radius: 16px; border: 1px solid #E2E5EA; background: #FFFFFF; cursor: pointer; font-family: inherit;" style-hover="border-color: #003366; box-shadow: 0 6px 18px rgba(0,51,102,.10)">
+              <span style="display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;">
+                <span style="{{ g.c1 }}"><svg viewBox="0 0 16 16" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v9h-11z M2.5 10.5l3-3 3 3 2-2 3 3 M10.5 5.5a.9.9 0 1 0 0 1.8a.9.9 0 0 0 0-1.8z"></path></svg></span>
+                <span style="{{ g.c2 }}"></span>
+                <span style="{{ g.c3 }}"></span>
+              </span>
+              <span style="display: flex; align-items: center; gap: 10px; padding: 0 4px;">
+                <span style="{{ g.iconStyle }}"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 4.5a1 1 0 0 1 1-1h3.5l1.5 1.5h6a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"></path></svg></span>
+                <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                  <span style="font-size: 15px; font-weight: 700; color: #1F2429;">{{ g.name }}</span>
+                  <span style="font-size: 12px; color: #80868E;">{{ g.meta }}</span>
+                </span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ galShowPhotos }}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 10px;">
+          <sc-for list="{{ galPhotos }}" as="ph" hint-placeholder-count="12">
+            <span style="{{ ph.style }}"><svg viewBox="0 0 16 16" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v9h-11z M2.5 10.5l3-3 3 3 2-2 3 3 M10.5 5.5a.9.9 0 1 0 0 1.8a.9.9 0 0 0 0-1.8z"></path></svg></span>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isRecs }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button onClick="{{ goHome }}" style="margin-bottom: 18px; padding: 0; border: 0; background: transparent; color: #003366; font-size: 13px; font-weight: 600; cursor: pointer;">{{ t.back }}</button>
+      <h1 style="margin: 0 0 8px; font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; font-weight: 400; color: #1F2429;">{{ t.recsTitle }}</h1>
+      <p style="margin: 0 0 20px; max-width: 620px; font-size: 14px; line-height: 1.55; color: #6B7178;">{{ rt.sub }}</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+        <sc-for list="{{ rcTabs }}" as="tab" hint-placeholder-count="3">
+          <button onClick="{{ tab.onClick }}" style="{{ tab.style }}">
+            <span style="{{ tab.iconStyle }}"><sc-if value="{{ tab.is_poll }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13.5V8 M8 13.5V3 M13 13.5V6"></path></svg></sc-if><sc-if value="{{ tab.is_culture }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h12v2a1.5 1.5 0 0 0 0 3v2H2v-2a1.5 1.5 0 0 0 0-3z M9.5 5v7"></path></svg></sc-if><sc-if value="{{ tab.is_weekend }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 13.5 6 6l3 4.5 2-3 3.5 6z M11.5 3a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3z"></path></svg></sc-if><sc-if value="{{ tab.is_gastro }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></sc-if></span>
+            {{ tab.label }}
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ showSubs }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px;">
+        <sc-for list="{{ rcSubs }}" as="s" hint-placeholder-count="4">
+          <button onClick="{{ s.onClick }}" style="{{ s.style }}">{{ s.label }}</button>
+        </sc-for>
+      </div>
+      </sc-if>
+      <sc-if value="{{ isPollTab }}" hint-placeholder-val="{{ false }}"><div style="height: 12px;"></div></sc-if>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+        <div style="flex: 3 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+          <sc-if value="{{ isPollTab }}" hint-placeholder-val="{{ false }}">
+          <div style="max-width: 640px; display: flex; flex-direction: column; gap: 12px; padding: 24px; border-radius: 16px; border: 1px solid #CFE1F2; background: #EEF5FB;">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #3D73A8;">
+            <span style="width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; color: #FFFFFF; background: #003366;"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13.5V8 M8 13.5V3 M13 13.5V6"></path></svg></span>
+            {{ poll.label }}
+          </span>
+          <span style="font-size: 22px; font-weight: 700; line-height: 1.3; color: #1F2429;">{{ poll.q }}</span>
+          <sc-for list="{{ poll.opts }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.onClick }}" style="{{ o.style }}">
+                  <span style="{{ o.barStyle }}"></span>
+                  <span style="{{ o.textStyle }}">{{ o.label }}</span>
+                  <span style="position: relative; font-size: 11px; font-weight: 700; color: #003366;">{{ o.pct }}</span>
+                </button>
+              </sc-for>
+          <span style="font-size: 11px; color: #80868E;">{{ poll.total }} &#183; {{ poll.until }}</span>
+        </div>
+          </sc-if>
+          <sc-for list="{{ rcPosts }}" as="p" hint-placeholder-count="4">
+            <article style="background: #FFFFFF; border: 1px solid #E2E5EA; border-radius: 16px; padding: 16px; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px;">
+              <div style="{{ p.imgStyle }}"><sc-if value="{{ p.s_theater }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2.5h6.5v4a3.25 3.25 0 0 1-6.5 0z M7.5 6h6.5v4a3.25 3.25 0 0 1-6.5 0z M4 4.8h.1 M6.5 4.8h.1 M9.5 8.3h.1 M12 8.3h.1 M9.8 11.3c.7-.6 1.7-.6 2.4 0 M4 7.2c.7.6 1.7.6 2.4 0"></path></svg></sc-if><sc-if value="{{ p.s_cinema }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6h9l-1.2 8H4.7z M6.2 6l.4 8 M9.8 6l-.4 8 M3.8 6a1.6 1.6 0 0 1 1.7-2.1a1.9 1.9 0 0 1 2.5-1.3a1.9 1.9 0 0 1 2.5 1.3A1.6 1.6 0 0 1 12.2 6"></path></svg></sc-if><sc-if value="{{ p.s_concerts }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12.5V3.5l7-1.5v9 M6 12.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0z M13 11a2 2 0 1 1-4 0a2 2 0 0 1 4 0z"></path></svg></sc-if><sc-if value="{{ p.s_books }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3h4A1.5 1.5 0 0 1 8 4.5v9A1.5 1.5 0 0 0 6.5 12h-4z M13.5 3h-4A1.5 1.5 0 0 0 8 4.5v9A1.5 1.5 0 0 1 9.5 12h4z"></path></svg></sc-if><sc-if value="{{ p.s_salas }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14V7l6-4.5L14 7v7z M6 14v-4h4v4 M2 7h12"></path></svg></sc-if><sc-if value="{{ p.s_wellness }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2s4.5 4.8 4.5 8a4.5 4.5 0 0 1-9 0C3.5 6.8 8 2 8 2z M6 10.5a2 2 0 0 0 2 2"></path></svg></sc-if><sc-if value="{{ p.s_trips }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 14.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13z M10.5 5.5 9 9l-3.5 1.5L7 7z"></path></svg></sc-if><sc-if value="{{ p.s_mountains }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 13.5 6 6l3 4.5 2-3 3.5 6z M11.5 3a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3z"></path></svg></sc-if><sc-if value="{{ p.s_recipes }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5h11V10a3 3 0 0 1-3 3h-5a3 3 0 0 1-3-3z M1.5 7.5h13 M6 2.5c-.5.8.5 1.2 0 2 M10 2.5c-.5.8.5 1.2 0 2"></path></svg></sc-if><sc-if value="{{ p.s_restaurants }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 1.5v4a1.5 1.5 0 0 0 3 0v-4 M6 5.5v9 M11 14.5V1.5c-1.5.5-2.5 2-2.5 4v3h2.5"></path></svg></sc-if><sc-if value="{{ p.s_coffee }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 16 16" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6h8v3.5a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3z M10.5 7h1.2a1.6 1.6 0 0 1 0 3.2h-1.2 M5 2.5V4 M8 2.5V4"></path></svg></sc-if></div>
+              <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px;">
+                  <span style="{{ p.tagStyle }}">{{ p.tag }}</span>
+                  <span style="font-size: 12px; color: #80868E; white-space: nowrap;">{{ p.author }} &#183; {{ p.time }}</span>
+                  <span style="margin-left: auto; display: flex; align-items: center; gap: 14px;">
+                    <button onClick="{{ p.onLike }}" style="display: flex; align-items: center; gap: 5px; padding: 0; border: 0; background: transparent; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; color: #1F2429;" style-hover="opacity: .7">
+                      <span style="{{ p.heartStyle }}"><svg viewBox="0 0 16 16" width="18" height="18" fill="{{ p.heartFill }}" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M8 13.5S2 10 2 5.8A2.8 2.8 0 0 1 8 4.3a2.8 2.8 0 0 1 6 1.5C14 10 8 13.5 8 13.5z"></path></svg></span>
+                      {{ p.likes }}
+                    </button>
+                    <span style="display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #1F2429;"><svg viewBox="0 0 16 16" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h11v7.5h-6l-3 2.5v-2.5h-2z"></path></svg>{{ p.ccount }}</span>
+                  </span>
+                </div>
+                <span style="font-size: 16px; font-weight: 700; line-height: 1.3; color: #1F2429;">{{ p.title }}</span>
+                <span style="font-size: 13px; line-height: 1.5; color: #474C53; text-wrap: pretty;">{{ p.text }}</span>
+                <span style="font-size: 12px; color: #80868E;">{{ p.meta }}</span>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <sc-for list="{{ p.comments }}" as="c" hint-placeholder-count="1">
+                    <span style="font-size: 12px; line-height: 1.45; color: #474C53;"><strong style="color: #1F2429;">{{ c.name }}</strong> {{ c.text }} <span style="color: #989EA6;">&#183; {{ c.time }}</span></span>
+                  </sc-for>
+                </div>
+                <div style="display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid #EAEDF1;">
+                  <input value="{{ p.draft }}" onChange="{{ p.onDraft }}" onKeyDown="{{ p.onKey }}" placeholder="{{ rt.comment }}" style="flex: 1 1 auto; min-width: 0; height: 34px; padding: 0 12px; border: 1px solid #DCE0E6; border-radius: 999px; background: #FAFBFC; font-size: 12px; color: #2A2F35; outline: none;" style-focus="border-color: #003366; background: #FFFFFF">
+                  <button onClick="{{ p.onSend }}" style="flex: 0 0 auto; height: 34px; padding: 0 14px; border: 0; border-radius: 999px; background: #003366; color: #FFFFFF; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer;" style-hover="background: #001F40">{{ rt.post }}</button>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+
+  <footer style="border-top: 1px solid #E2E5EA; background: #FFFFFF;">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px;">
+      <span style="font-size: 12px; color: #989EA6;">{{ t.footer }}</span>
+      <span style="font-size: 12px; color: #989EA6;">{{ t.footerNote }}</span>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLanguage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;sr&quot;,&quot;en&quot;,&quot;de&quot;],&quot;default&quot;:&quot;sr&quot;,&quot;tsType&quot;:&quot;'sr' | 'en' | 'de'&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;startPage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;useful&quot;,&quot;recs&quot;,&quot;homemade&quot;,&quot;jobs&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;showNewcomer&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;season&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;winter&quot;,&quot;spring&quot;,&quot;summer&quot;,&quot;autumn&quot;,&quot;auto&quot;,&quot;off&quot;],&quot;default&quot;:&quot;winter&quot;,&quot;tsType&quot;:&quot;'winter' | 'spring' | 'summer' | 'autumn' | 'auto' | 'off'&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;animateAlways&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Look&quot;}}">
+const PEOPLE = [
+  { id: 'aj', first: 'Anđa', name: 'Anđa Jovanović', initials: 'AJ', dept: 'support', office: 'Beograd', role: { en: 'Support specialist', sr: 'Specijalista podrške', de: 'Support-Spezialistin' }, email: 'andja.jovanovic@example.com', phone: '+381 11 400 2190', since: { en: 'This week', sr: 'Ove nedelje', de: 'Diese Woche' }, skills: { en: ['Customer tickets', 'Happy to learn'], sr: ['Tiketi korisnika', 'Rado uči'], de: ['Kundentickets', 'Lernt gerne'] } },
+  { id: 'jn', first: 'Jana', name: 'Jana Nikolić', initials: 'JN', dept: 'design', office: 'Beograd', role: { en: 'Product designer', sr: 'Dizajnerka proizvoda', de: 'Produktdesignerin' }, email: 'jana.nikolic@example.com', phone: '+381 11 400 2191', since: { en: 'This week', sr: 'Ove nedelje', de: 'Diese Woche' }, skills: { en: ['UI design', 'User research'], sr: ['UI dizajn', 'Istraživanje korisnika'], de: ['UI-Design', 'Nutzerforschung'] } },
+  { id: 'mp', first: 'Milena', name: 'Milena Petrović', initials: 'MP', dept: 'design', office: 'Beograd', role: { en: 'Team lead, product design', sr: 'Vođa tima, dizajn proizvoda', de: 'Teamleitung, Produktdesign' }, email: 'milena.petrovic@example.com', phone: '+381 11 400 2114', since: { en: 'March 2019', sr: 'mart 2019.', de: 'März 2019' }, skills: { en: ['Design reviews', 'Prototypes', 'Accessibility'], sr: ['Pregled dizajna', 'Prototipovi', 'Pristupačnost'], de: ['Design-Reviews', 'Prototypen', 'Barrierefreiheit'] } },
+  { id: 'ij', first: 'Ivan', name: 'Ivan Jovanović', initials: 'IJ', dept: 'dev', office: 'Beograd', role: { en: 'Senior developer, web client', sr: 'Senior programer, web klijent', de: 'Senior-Entwickler, Web-Client' }, email: 'ivan.jovanovic@example.com', phone: '+381 11 400 2132', since: { en: 'September 2017', sr: 'septembar 2017.', de: 'September 2017' }, skills: { en: ['Frontend architecture', 'Code review'], sr: ['Frontend arhitektura', 'Pregled koda'], de: ['Frontend-Architektur', 'Code-Review'] } },
+  { id: 'aw', first: 'Anna', name: 'Anna Weber', initials: 'AW', dept: 'hr', office: 'Berlin', role: { en: 'HR business partner', sr: 'HR poslovni partner', de: 'HR Business Partner' }, email: 'anna.weber@example.com', phone: '+49 30 4000 118', since: { en: 'January 2021', sr: 'januar 2021.', de: 'Januar 2021' }, skills: { en: ['Contracts', 'Onboarding'], sr: ['Ugovori', 'Uvođenje u posao'], de: ['Verträge', 'Onboarding'] } },
+  { id: 'sdj', first: 'Stefan', name: 'Stefan Đorđević', initials: 'SĐ', dept: 'dev', office: 'Beograd', role: { en: 'QA engineer', sr: 'QA inženjer', de: 'QA-Engineer' }, email: 'stefan.djordjevic@example.com', phone: '+381 11 400 2145', since: { en: 'June 2020', sr: 'jun 2020.', de: 'Juni 2020' }, skills: { en: ['Test automation', 'Bug triage'], sr: ['Automatizacija testova', 'Trijaža grešaka'], de: ['Testautomatisierung', 'Bug-Triage'] } },
+  { id: 'ri', first: 'Radmila', name: 'Radmila Ilić', initials: 'RI', dept: 'support', office: 'Beograd', role: { en: 'Support specialist', sr: 'Specijalista podrške', de: 'Support-Spezialistin' }, email: 'radmila.ilic@example.com', phone: '+381 11 400 2109', since: { en: 'April 2022', sr: 'april 2022.', de: 'April 2022' }, skills: { en: ['Customer tickets', 'Escalations'], sr: ['Tiketi korisnika', 'Eskalacije'], de: ['Kundentickets', 'Eskalationen'] } },
+  { id: 'lb', first: 'Lukas', name: 'Lukas Braun', initials: 'LB', dept: 'sales', office: 'Berlin', role: { en: 'Solution consultant', sr: 'Konsultant za rešenja', de: 'Solution Consultant' }, email: 'lukas.braun@example.com', phone: '+49 30 4000 204', since: { en: 'November 2018', sr: 'novembar 2018.', de: 'November 2018' }, skills: { en: ['Demos', 'Workshops'], sr: ['Demonstracije', 'Radionice'], de: ['Demos', 'Workshops'] } },
+  { id: 'pk', first: 'Petar', name: 'Petar Kostić', initials: 'PK', dept: 'dev', office: 'Beograd', role: { en: 'DevOps engineer', sr: 'DevOps inženjer', de: 'DevOps-Engineer' }, email: 'petar.kostic@example.com', phone: '+381 11 400 2177', since: { en: 'February 2021', sr: 'februar 2021.', de: 'Februar 2021' }, skills: { en: ['Deployments', 'VPN & access'], sr: ['Isporuke', 'VPN i pristupi'], de: ['Deployments', 'VPN & Zugänge'] } },
+  { id: 'nm', first: 'Nada', name: 'Nada Marković', initials: 'NM', dept: 'office', office: 'Beograd', role: { en: 'Office manager', sr: 'Office menadžer', de: 'Office-Managerin' }, email: 'nada.markovic@example.com', phone: '+381 11 400 2100', since: { en: 'August 2016', sr: 'avgust 2016.', de: 'August 2016' }, skills: { en: ['Office & supplies', 'Events'], sr: ['Kancelarija i materijal', 'Događaji'], de: ['Büro & Material', 'Events'] } },
+  { id: 'nt', first: 'Nikola', name: 'Nikola Todorović', initials: 'NT', dept: 'dev', office: 'Beograd', role: { en: 'Junior developer, integrations', sr: 'Junior programer, integracije', de: 'Junior-Entwickler, Integrationen' }, email: 'nikola.todorovic@example.com', phone: '+381 11 400 2188', since: { en: 'This week', sr: 'Ove nedelje', de: 'Diese Woche' }, skills: { en: ['Learning the stack', 'Happy to pair'], sr: ['Uči sistem', 'Rado radi u paru'], de: ['Lernt den Stack', 'Pairing willkommen'] } }
+];
+
+const FOOD_ORDER = { orderUrl: '#', trackUrl: '#', account: '160-0000001234567-89', payee: 'Nada Marković', organizer: 'Nada M.', deadline: '11:00', orderedAt: '11:05', eta: '12:15' };
+const CHAT = [
+  { sys: true, text: 'Ručak · danas', time: '09:12' },
+  { who: 'nm', text: 'Poručujem u 11:00, upišite ovde šta želite.', time: '09:13' },
+  { who: 'ij', text: 'Pljeskavica, srednja, sa kajmakom', time: '09:40' },
+  { who: 'ri', text: 'Posna musaka i kisela voda', time: '10:02' },
+  { who: 'pk', text: 'Isto kao Ivan', time: '10:15' },
+  { who: 'me', text: 'Piletina sa rižom, molim', time: '10:21' }
+];
+const NEWCOMERS = ['nt', 'aj', 'jn'];
+const NEW_NOTES = {
+  nt: { en: 'Sits on the 3rd floor, next to the kitchen. Coffee invitations welcome.', sr: 'Sedi na 3. spratu, pored kuhinje. Pozivi na kafu su dobrodošli.', de: 'Sitzt in der 3. Etage, neben der Küche. Kaffee-Einladungen willkommen.' },
+  aj: { en: 'Joins the support team. Ask her about anything customer-facing.', sr: 'Pridružuje se timu podrške. Pitajte je sve o korisnicima.', de: 'Verstärkt das Support-Team. Fragt sie alles rund um Kunden.' },
+  jn: { en: 'Our new product designer, 2nd floor. Loves a good design critique.', sr: 'Naša nova dizajnerka, 2. sprat. Voli dobru diskusiju o dizajnu.', de: 'Unsere neue Produktdesignerin, 2. Etage. Liebt gute Design-Kritik.' }
+};
+const DEPTS = {
+  all: { en: 'Everyone', sr: 'Svi', de: 'Alle' }, dev: { en: 'Development', sr: 'Razvoj', de: 'Entwicklung' },
+  design: { en: 'Design', sr: 'Dizajn', de: 'Design' }, support: { en: 'Support', sr: 'Podrška', de: 'Support' },
+  hr: { en: 'HR', sr: 'HR', de: 'HR' }, sales: { en: 'Sales', sr: 'Prodaja', de: 'Vertrieb' }, office: { en: 'Office', sr: 'Kancelarija', de: 'Büro' }
+};
+
+const WEEK = [
+  { short: { en: 'Mon', sr: 'Pon', de: 'Mo' }, date: '5', items: [
+    { time: '10:00', text: { en: 'Weekly kick-off, room Avala', sr: 'Nedeljni sastanak, sala Avala', de: 'Weekly Kick-off, Raum Avala' } },
+    { time: { en: 'All day', sr: 'Ceo dan', de: 'Ganztags' }, text: { en: 'Nikola Todorović starts in integrations', sr: 'Nikola Todorović počinje u timu za integracije', de: 'Nikola Todorović startet im Integrations-Team' } }
+  ] },
+  { short: { en: 'Tue', sr: 'Uto', de: 'Di' }, date: '6', items: [
+    { time: '09:00', text: { en: 'Pancakes in the kitchen, 3rd floor', sr: 'Palačinke u kuhinji, 3. sprat', de: 'Pfannkuchen in der Küche, 3. Etage' } },
+    { time: '15:00', text: { en: 'Release 11.10 goes to staging', sr: 'Izdanje 11.10 ide na staging', de: 'Release 11.10 geht auf Staging' } }
+  ] },
+  { short: { en: 'Wed', sr: 'Sre', de: 'Mi' }, date: '7', items: [
+    { time: '13:00', text: { en: 'Birthday cake for Radmila, lounge', sr: 'Rođendanska torta za Radmilu, lounge', de: 'Geburtstagskuchen für Radmila, Lounge' } },
+    { time: '17:00', text: { en: 'Tech talk: search performance', sr: 'Tech talk: brzina pretrage', de: 'Tech-Talk: Suchperformance' } }
+  ] },
+  { short: { en: 'Thu', sr: 'Čet', de: 'Do' }, date: '8', items: [
+    { time: '11:00', text: { en: 'Insurance consultation, book with HR', sr: 'Savetovanje o osiguranju, zakazati kod HR-a', de: 'Versicherungsberatung, Termin über HR' } },
+    { time: '16:00', text: { en: 'Homemade market in the lobby', sr: 'Domaća pijaca u holu', de: 'Hausgemachtes-Markt in der Lobby' } }
+  ] },
+  { short: { en: 'Fri', sr: 'Pet', de: 'Fr' }, date: '9', items: [
+    { time: '12:00', text: { en: 'Team lunch, everyone welcome', sr: 'Zajednički ručak, svi su dobrodošli', de: 'Team-Lunch, alle willkommen' } },
+    { time: '16:00', text: { en: 'Office closes early', sr: 'Kancelarija se ranije zatvara', de: 'Büro schließt früher' } }
+  ] }
+];
+const TODAY_INDEX = 2;
+const TODAY_KEY = '2026-10-07';
+const TX = (en, sr, de) => ({ en, sr, de: de || en });
+const CAL = [
+  ['2026-09-30', 'event', '10:00', TX('Q3 review', 'Pregled Q3 kvartala', 'Q3-Rückblick')],
+  ['2026-10-01', 'event', '10:00', TX('Q4 kick-off', 'Početak Q4 kvartala', 'Q4-Kick-off')],
+  ['2026-10-02', 'food', '09:00', TX('Team breakfast', 'Zajednički doručak', 'Team-Frühstück')],
+  ['2026-10-05', 'event', '10:00', TX('Weekly kick-off, room Avala', 'Nedeljni sastanak, sala Avala', 'Weekly Kick-off, Raum Avala')],
+  ['2026-10-05', 'event', '', TX('Nikola Todorović starts', 'Nikola Todorović počinje', 'Nikola Todorović startet'), TX('Integrations team', 'Tim za integracije', 'Integrations-Team')],
+  ['2026-10-06', 'food', '09:00', TX('Pancakes, 3rd floor kitchen', 'Palačinke, kuhinja 3. sprat', 'Pfannkuchen, Küche 3. Etage')],
+  ['2026-10-06', 'event', '15:00', TX('Release 11.10 to staging', 'Izdanje 11.10 na staging', 'Release 11.10 auf Staging')],
+  ['2026-10-07', 'bday', '13:00', TX('Radmila Ilić', 'Radmila Ilić', 'Radmila Ilić'), TX('Birthday', 'Rođendan', 'Geburtstag')],
+  ['2026-10-07', 'food', '09:00', TX('Fresh fruit', 'Sveže voće', 'Frisches Obst'), TX('Kitchen', 'Kuhinja', 'Küche')],
+  ['2026-10-07', 'event', '10:30', TX('Sprint review', 'Sprint review', 'Sprint-Review'), TX('Kopaonik', 'Kopaonik', 'Kopaonik')],
+  ['2026-10-07', 'event', '17:00', TX('Tech talk', 'Tech talk', 'Tech-Talk'), TX('Search', 'Pretraga', 'Suche')],
+  ['2026-10-08', 'food', '09:00', TX('Pancakes', 'Palačinke', 'Pfannkuchen'), TX('Kitchen, 3rd floor', 'Kuhinja, 3. sprat', 'Küche, 3. Etage')],
+  ['2026-10-08', 'bday', '', TX('Ivan Jovanović, 9 years', 'Ivan Jovanović, 9 godina', 'Ivan Jovanović, 9 Jahre'), TX('Work anniversary', 'Godišnjica u firmi', 'Firmenjubiläum')],
+  ['2026-10-08', 'event', '11:00', TX('Insurance consultation', 'Savetovanje o osiguranju', 'Versicherungsberatung'), TX('Book with HR', 'Zakazati kod HR-a', 'Termin über HR')],
+  ['2026-10-08', 'event', '16:00', TX('Homemade market, lobby', 'Domaća pijaca, hol', 'Hausgemachtes-Markt, Lobby')],
+  ['2026-10-09', 'food', '12:00', TX('Team lunch', 'Zajednički ručak', 'Team-Lunch')],
+  ['2026-10-11', 'bday', '', TX('Nada Marković', 'Nada Marković', 'Nada Marković'), TX('Birthday', 'Rođendan', 'Geburtstag')],
+  ['2026-10-14', 'event', '17:00', TX('Tech talk: Angular 20', 'Tech talk: Angular 20', 'Tech-Talk: Angular 20')],
+  ['2026-10-16', 'food', '09:00', TX('Pancakes', 'Palačinke', 'Pfannkuchen')],
+  ['2026-10-20', 'event', '15:00', TX('Release 11.11', 'Izdanje 11.11', 'Release 11.11')],
+  ['2026-10-23', 'event', '14:00', TX('Team building', 'Team building', 'Teambuilding')],
+  ['2026-10-24', 'event', '20:00', TX('Atelje 212, group tickets', 'Atelje 212, grupne karte', 'Atelje 212, Gruppentickets')],
+  ['2026-10-27', 'slava', '', TX('Sv. Petka', 'Sv. Petka', 'Sv. Petka'), TX('Radmila I., Petar K.', 'Radmila I., Petar K.', 'Radmila I., Petar K.')],
+  ['2026-10-29', 'bday', '', TX('Lukas Braun', 'Lukas Braun', 'Lukas Braun'), TX('Birthday', 'Rođendan', 'Geburtstag')],
+  ['2026-11-08', 'slava', '', TX('Sv. Dimitrije', 'Mitrovdan', 'Sv. Dimitrije'), TX('Ivan J.', 'Ivan J.', 'Ivan J.')],
+  ['2026-11-11', 'holiday', '', TX('Armistice Day, office closed', 'Dan primirja, kancelarija zatvorena', 'Waffenstillstandstag, Büro geschlossen')],
+  ['2026-11-21', 'slava', '', TX('Sv. Arhangel Mihailo', 'Aranđelovdan', 'Sv. Arhangel Mihailo'), TX('Milena P., Stefan Đ.', 'Milena P., Stefan Đ.', 'Milena P., Stefan Đ.')],
+  ['2026-12-19', 'slava', '', TX('Sv. Nikola', 'Nikoljdan', 'Sv. Nikola'), TX('Nikola T., Nada M.', 'Nikola T., Nada M.', 'Nikola T., Nada M.')]
+].map(([date, type, time, text, who]) => ({ date, type, time, text, who }));
+const TYPE_COLORS = { bday: ['#A2502A', '#F7E6DA'], slava: ['#8A6134', '#F3EADF'], event: ['#003366', '#DCEAF6'], food: ['#7A5429', '#F3EADF'], holiday: ['#9A3B3B', '#F5E3E3'] };
+const TYPE_LABELS = { bday: TX('Birthday', 'Rođendan', 'Geburtstag'), slava: TX('Slava', 'Slava', 'Slava'), event: TX('Event', 'Događaj', 'Termin'), food: TX('Food', 'Hrana', 'Essen'), holiday: TX('Holiday', 'Praznik', 'Feiertag') };
+const MONTHS = { en: ['January','February','March','April','May','June','July','August','September','October','November','December'], sr: ['januar','februar','mart','april','maj','jun','jul','avgust','septembar','oktobar','novembar','decembar'], de: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'] };
+const WDAYS = { en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], sr: ['Pon','Uto','Sre','Čet','Pet','Sub','Ned'], de: ['Mo','Di','Mi','Do','Fr','Sa','So'] };
+const WDAYS_LONG = { en: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], sr: ['Ponedeljak','Utorak','Sreda','Četvrtak','Petak','Subota','Nedelja'], de: ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'] };
+const byTime = (a, b) => (a.time || '99:99').localeCompare(b.time || '99:99');
+const ymd = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
+const CELEBRATIONS = [
+  { initials: 'RI', name: 'Radmila Ilić', what: { en: 'Birthday', sr: 'Rođendan', de: 'Geburtstag' }, when: { en: 'Wed', sr: 'Sre', de: 'Mi' } },
+  { initials: 'IJ', name: 'Ivan Jovanović', what: { en: '9 years with us', sr: '9 godina sa nama', de: '9 Jahre dabei' }, when: { en: 'Thu', sr: 'Čet', de: 'Do' } },
+  { initials: 'NM', name: 'Nada Marković', what: { en: 'Birthday', sr: 'Rođendan', de: 'Geburtstag' }, when: { en: 'Sun', sr: 'Ned', de: 'So' } }
+];
+
+const SLAVA = [
+  { name: { en: 'Sv. Petka', sr: 'Sv. Petka', de: 'Sv. Petka' }, date: { en: '27 Oct', sr: '27. okt.', de: '27. Okt.' }, people: 'Radmila I., Petar K.' },
+  { name: { en: 'Sv. Arhangel Mihailo', sr: 'Sv. Arhangel Mihailo', de: 'Sv. Arhangel Mihailo' }, date: { en: '21 Nov', sr: '21. nov.', de: '21. Nov.' }, people: 'Milena P., Stefan Đ.' },
+  { name: { en: 'Sv. Nikola', sr: 'Sv. Nikola', de: 'Sv. Nikola' }, date: { en: '19 Dec', sr: '19. dec.', de: '19. Dez.' }, people: 'Nikola T., Nada M., Ivan J.' }
+];
+
+const OFFICE_LINKS = [
+  { key: 'homemade', title: { en: 'Homemade selling', sr: 'Domaća prodaja', de: 'Hausgemachtes verkaufen' }, meta: { en: '6 offers from colleagues', sr: '6 ponuda kolega', de: '6 Angebote von Kolleg:innen' }, cta: { en: 'Browse', sr: 'Pogledaj', de: 'Ansehen' } },
+  { key: 'jobs', title: { en: 'Open positions & referrals', sr: 'Otvorene pozicije i preporuke', de: 'Offene Stellen & Empfehlungen' }, meta: { en: '4 roles open, referral bonus', sr: '4 otvorene pozicije, bonus za preporuku', de: '4 Stellen offen, Empfehlungsbonus' }, cta: { en: 'Refer', sr: 'Preporuči', de: 'Empfehlen' } },
+  { key: 'canteen', title: { en: 'Canteen today: chicken & rice, veggie musaka', sr: 'Menza danas: piletina s pirinčem, posna musaka', de: 'Kantine heute: Huhn & Reis, Gemüse-Musaka' }, meta: { en: 'Served 11:30 – 14:00', sr: 'Od 11:30 do 14:00', de: 'Ausgabe 11:30 – 14:00' }, cta: { en: 'Menu', sr: 'Meni', de: 'Menü' } },
+  { key: 'parking', title: { en: 'Garage level 2 closed on Thursday', sr: 'Garaža, nivo 2 zatvoren u četvrtak', de: 'Parkebene 2 am Donnerstag gesperrt' }, meta: { en: 'Use the visitor spots instead', sr: 'Koristite mesta za posetioce', de: 'Bitte Besucherplätze nutzen' }, cta: { en: 'Details', sr: 'Detalji', de: 'Details' } }
+];
+
+const HOMEMADE = [
+  { tag: { en: 'Food', sr: 'Hrana', de: 'Essen' }, title: { en: 'Acacia honey, 900 g jars', sr: 'Bagremov med, tegle od 900 g', de: 'Akazienhonig, 900-g-Gläser' }, note: { en: 'From family hives near Topola. Pick up Thursday.', sr: 'Iz porodičnih košnica kod Topole. Preuzimanje u četvrtak.', de: 'Aus Familienbienenstöcken bei Topola. Abholung Donnerstag.' }, seller: 'Nada Marković', initials: 'NM', sellerId: 'nm', price: '1 200 RSD' },
+  { tag: { en: 'Food', sr: 'Hrana', de: 'Essen' }, title: { en: 'Ajvar, homemade', sr: 'Domaći ajvar', de: 'Ajvar, hausgemacht' }, note: { en: 'Mild and hot, six jars left.', sr: 'Blagi i ljuti, ostalo šest tegli.', de: 'Mild und scharf, sechs Gläser übrig.' }, seller: 'Radmila Ilić', initials: 'RI', sellerId: 'ri', price: '900 RSD' },
+  { tag: { en: 'Handmade', sr: 'Ručni rad', de: 'Handarbeit' }, title: { en: 'Knitted wool socks', sr: 'Pletene vunene čarape', de: 'Gestrickte Wollsocken' }, note: { en: 'Sizes 38 – 44.', sr: 'Veličine 38 – 44.', de: 'Größen 38 – 44.' }, seller: 'Milena Petrović', initials: 'MP', sellerId: 'mp', price: '1 500 RSD' },
+  { tag: { en: 'Handmade', sr: 'Ručni rad', de: 'Handarbeit' }, title: { en: 'Ceramic mugs', sr: 'Keramičke šolje', de: 'Keramiktassen' }, note: { en: 'Slightly imperfect glaze, fully usable.', sr: 'Glazura malo nesavršena, potpuno upotrebljive.', de: 'Leichte Glasurfehler, voll nutzbar.' }, seller: 'Stefan Đorđević', initials: 'SĐ', sellerId: 'sdj', price: '1 000 RSD' },
+  { tag: { en: 'Garden', sr: 'Bašta', de: 'Garten' }, title: { en: 'Pepper seedlings', sr: 'Rasad paprike', de: 'Paprikasetzlinge' }, note: { en: 'Bring your own box.', sr: 'Ponesite svoju kutiju.', de: 'Bitte Kiste mitbringen.' }, seller: 'Petar Kostić', initials: 'PK', sellerId: 'pk', price: '200 RSD' },
+  { tag: { en: 'Baking', sr: 'Pecivo', de: 'Backen' }, title: { en: 'Gibanica on order, Friday morning', sr: 'Gibanica po porudžbini, petak ujutru', de: 'Gibanica auf Bestellung, Freitagmorgen' }, note: { en: 'Order by Wednesday evening.', sr: 'Poručiti do srede uveče.', de: 'Bestellung bis Mittwochabend.' }, seller: 'Ivan Jovanović', initials: 'IJ', sellerId: 'ij', price: '800 RSD' }
+];
+
+const JOBS = [
+  { dept: 'dev', title: { en: 'Angular developer, web client', sr: 'Angular programer, web klijent', de: 'Angular-Entwickler:in, Web-Client' }, meta: { en: 'Belgrade · full time', sr: 'Beograd · puno radno vreme', de: 'Belgrad · Vollzeit' }, bonus: { en: 'Bonus 60 000 RSD', sr: 'Bonus 60 000 RSD', de: 'Bonus 60 000 RSD' } },
+  { dept: 'support', title: { en: 'Support specialist, 2nd level', sr: 'Specijalista podrške, 2. nivo', de: 'Support-Spezialist:in, 2nd Level' }, meta: { en: 'Belgrade · hybrid', sr: 'Beograd · hibridno', de: 'Belgrad · hybrid' }, bonus: { en: 'Bonus 40 000 RSD', sr: 'Bonus 40 000 RSD', de: 'Bonus 40 000 RSD' } },
+  { dept: 'design', title: { en: 'Product designer', sr: 'Dizajner proizvoda', de: 'Produktdesigner:in' }, meta: { en: 'Belgrade or Berlin · full time', sr: 'Beograd ili Berlin · puno radno vreme', de: 'Belgrad oder Berlin · Vollzeit' }, bonus: { en: 'Bonus 60 000 RSD', sr: 'Bonus 60 000 RSD', de: 'Bonus 60 000 RSD' } },
+  { dept: 'dev', title: { en: 'Student, test automation', sr: 'Student, automatizacija testova', de: 'Werkstudent:in, Testautomatisierung' }, meta: { en: 'Belgrade · 20 h per week', sr: 'Beograd · 20 h nedeljno', de: 'Belgrad · 20 h pro Woche' }, bonus: { en: 'Bonus 20 000 RSD', sr: 'Bonus 20 000 RSD', de: 'Bonus 20 000 RSD' } }
+];
+
+const USEFUL = [
+  { title: { en: 'Getting started', sr: 'Prvi koraci', de: 'Erste Schritte' }, links: [
+    { title: { en: 'Onboarding checklist', sr: 'Lista za početak', de: 'Onboarding-Checkliste' }, meta: { en: 'Your first 30 days', sr: 'Tvojih prvih 30 dana', de: 'Deine ersten 30 Tage' } },
+    { title: { en: 'IT setup & VPN access', sr: 'IT podešavanje i VPN', de: 'IT-Setup & VPN-Zugang' }, meta: { en: 'Service desk, ext. 4000', sr: 'Service desk, lokal 4000', de: 'Service-Desk, Durchwahl 4000' } },
+    { title: { en: 'Who does what', sr: 'Ko šta radi', de: 'Wer macht was' }, meta: { en: 'Teams and contacts', sr: 'Timovi i kontakti', de: 'Teams und Kontakte' } },
+    { title: { en: 'Office rules & access cards', sr: 'Pravila kancelarije i kartice', de: 'Bürordnung & Zugangskarten' }, meta: { en: 'Reception, ground floor', sr: 'Recepcija, prizemlje', de: 'Empfang, Erdgeschoss' } }
+  ] },
+  { title: { en: 'People & benefits', sr: 'Zaposleni i beneficije', de: 'Personal & Benefits' }, links: [
+    { title: { en: 'Health insurance', sr: 'Zdravstveno osiguranje', de: 'Krankenversicherung' }, meta: { en: 'Coverage, claims, forms', sr: 'Pokriće, zahtevi, obrasci', de: 'Leistungen, Anträge, Formulare' } },
+    { title: { en: 'Vacation & absence', sr: 'Godišnji odmor i odsustvo', de: 'Urlaub & Abwesenheit' }, meta: { en: 'Request in the HR portal', sr: 'Zahtev u HR portalu', de: 'Antrag im HR-Portal' } },
+    { title: { en: 'Home office', sr: 'Rad od kuće', de: 'Homeoffice-Regelung' }, meta: { en: 'Up to 3 days per week', sr: 'Do 3 dana nedeljno', de: 'Bis zu 3 Tage pro Woche' } },
+    { title: { en: 'Learning budget', sr: 'Budžet za učenje', de: 'Weiterbildungsbudget' }, meta: { en: 'Courses, books, conferences', sr: 'Kursevi, knjige, konferencije', de: 'Kurse, Bücher, Konferenzen' } }
+  ] },
+  { title: { en: 'Everyday admin', sr: 'Svakodnevna administracija', de: 'Alltag & Verwaltung' }, links: [
+    { title: { en: 'Travel & expenses', sr: 'Putovanja i troškovi', de: 'Reisen & Spesen' }, meta: { en: 'Receipts within 14 days', sr: 'Računi u roku od 14 dana', de: 'Belege innerhalb 14 Tagen' } },
+    { title: { en: 'Order office supplies', sr: 'Naruči kancelarijski materijal', de: 'Büromaterial bestellen' }, meta: { en: 'Via the office manager', sr: 'Preko office menadžera', de: 'Über das Office-Management' } },
+    { title: { en: 'Report an IT incident', sr: 'Prijavi IT problem', de: 'IT-Störung melden' }, meta: { en: 'Service desk ticket', sr: 'Tiket za service desk', de: 'Ticket beim Service-Desk' } },
+    { title: { en: 'Meeting rooms', sr: 'Sale za sastanke', de: 'Besprechungsräume' }, meta: { en: 'Avala, Kopaonik, Tara', sr: 'Avala, Kopaonik, Tara', de: 'Avala, Kopaonik, Tara' } }
+  ] }
+];
+
+const RECS = [
+  { cat: 'culture', tag: { en: 'Culture', sr: 'Kultura', de: 'Kultur' }, title: { en: 'New exhibition, National Museum', sr: 'Nova izložba, Narodni muzej', de: 'Neue Ausstellung, Nationalmuseum' }, note: { en: 'Recommended by Milena, worth an evening.', sr: 'Preporuka Milene, vredi jedno veče.', de: 'Empfehlung von Milena, einen Abend wert.' }, meta: { en: 'Until end of November', sr: 'Do kraja novembra', de: 'Bis Ende November' } },
+  { cat: 'culture', tag: { en: 'Culture', sr: 'Kultura', de: 'Kultur' }, title: { en: 'Film festival at Kinoteka', sr: 'Filmski festival u Kinoteci', de: 'Filmfestival in der Kinoteka' }, note: { en: 'Classic films with subtitles.', sr: 'Klasici sa titlom.', de: 'Klassiker mit Untertiteln.' }, meta: { en: 'Every Friday', sr: 'Svakog petka', de: 'Jeden Freitag' } },
+  { cat: 'theater', tag: { en: 'Theater', sr: 'Pozorište', de: 'Theater' }, title: { en: 'Comedy night, Atelje 212', sr: 'Komedija, Atelje 212', de: 'Komödienabend, Atelje 212' }, note: { en: 'Group tickets through the office team.', sr: 'Grupne karte preko office tima.', de: 'Gruppentickets über das Office-Team.' }, meta: { en: '24 October, 20:00', sr: '24. oktobar, 20:00', de: '24. Oktober, 20:00' } },
+  { cat: 'theater', tag: { en: 'Theater', sr: 'Pozorište', de: 'Theater' }, title: { en: 'Improv evening, Bitef teatar', sr: 'Impro veče, Bitef teatar', de: 'Improv-Abend, Bitef teatar' }, note: { en: 'In Serbian, easy to follow.', sr: 'Na srpskom, lako se prati.', de: 'Auf Serbisch, gut zu folgen.' }, meta: { en: 'Every second Tuesday', sr: 'Svakog drugog utorka', de: 'Jeden zweiten Dienstag' } },
+  { cat: 'weekend', tag: { en: 'Weekend', sr: 'Vikend', de: 'Wochenende' }, title: { en: 'Avala hike', sr: 'Šetnja na Avalu', de: 'Wanderung auf die Avala' }, note: { en: 'Two hours, easy. Colleagues meet at 09:00.', sr: 'Dva sata, lagano. Kolege se nalaze u 09:00.', de: 'Zwei Stunden, leicht. Treffpunkt 09:00.' }, meta: { en: 'Saturday', sr: 'Subota', de: 'Samstag' } },
+  { cat: 'weekend', tag: { en: 'Weekend', sr: 'Vikend', de: 'Wochenende' }, title: { en: 'Kalenić market', sr: 'Kalenić pijaca', de: 'Markt Kalenić' }, note: { en: 'Best before 10:00.', sr: 'Najbolje pre 10:00.', de: 'Am besten vor 10:00.' }, meta: { en: 'Saturday & Sunday', sr: 'Subota i nedelja', de: 'Samstag & Sonntag' } },
+  { cat: 'food', tag: { en: 'Food', sr: 'Hrana', de: 'Essen' }, title: { en: 'Lunch spots within ten minutes', sr: 'Ručak na deset minuta od kancelarije', de: 'Mittagessen in zehn Minuten' }, note: { en: 'Colleague-tested list, updated monthly.', sr: 'Lista koju su kolege isprobale, ažurira se mesečno.', de: 'Von Kolleg:innen getestet, monatlich aktualisiert.' }, meta: { en: '9 places', sr: '9 mesta', de: '9 Orte' } }
+];
+
+const T = {
+  en: {
+    intranet: 'Intranet', portal: 'OS BG portal', homeTitle: 'Everything for this week', homeSub: 'Short notes only. Anything longer lives on its own page, one click away.',
+    searchEmployee: 'Find a colleague', searchPlaceholder: 'First or last name', searchHint: 'Type at least two letters, then press Enter.', noHits: 'No colleague with that name.', fullProfile: 'Full profile', clear: 'Clear', email: 'Email',
+    weekTitle: 'Sneak a peek', today: 'Today', thisWeek: 'This week', upcoming: 'Coming up', nothing: 'Nothing planned.', celebrate: 'Celebrate time', slava: 'Slava time',
+    newEmployee: 'New colleague', hello: 'Hello', viewProfile: 'Profile', sayHello: 'Say hello',
+    officeTitle: 'Office life', inCalendar: 'Calendar', orderNow: 'Order', chatPlaceholder: 'Write a message…', teamsSub: 'Teams group · Lunch', openTeams: 'Open in Teams', send: 'Send', foodSub: 'Group order · until {d}', openUntil: 'Open until {d}', ordered: 'Ordered at {t}', stepOrder: 'Order', stepPay: 'Pay', stepTrack: 'Track', openOrder: 'Open order', organizer: 'Organizer', payee: 'Payee', copy: 'Copy', copied: 'Copied', trackDelivery: 'Track delivery', trackSoon: 'After ordering', trackLater: 'Link appears after the order', eta: 'Arrives around {t}', orderFood: 'Order food', orderFoodSub: 'Group order by 11:00', adsTitle: 'Classifieds', handyman: 'Majstor Žile', handymanSub: 'Repairs, plumbing, small jobs', parking: 'Parking', parkingNote: 'Thursday: garage full from 09:00. Spot 12 stays free for a visitor.', foodNone: 'Nothing planned yet', usefulTitle: 'Useful information', allLinks: 'All links', recsTitle: 'Recommendations', more: 'More', back: '\u2190 Back to home',
+    helpWith: 'Ask me about', sameTeam: 'Same team', details: 'Details', refer: 'Refer someone',
+    homemadeTitle: 'Classifieds', homemadeSub: 'Buy, sell, give away. Write to the colleague directly; the rest is between you.',
+    jobsTitle: 'Open positions & referrals', jobsSub: 'Know someone good? Refer them and get the bonus once they pass probation.',
+    usefulPageSub: 'The links people ask for most often, grouped so you can scan them.', recsPageSub: 'Culture, theater and weekend ideas from colleagues.',
+    footer: 'Intranet \u00b7 internal use only', footerNote: 'Placeholder content \u2014 real content to follow',
+    navHome: 'Home', navJobs: 'Jobs', phone: 'Phone', office: 'Office', since: 'With us since',
+    newNote: 'Nikola sits on the 3rd floor, next to the kitchen. Coffee invitations welcome.', tomorrow: 'Tomorrow', highlight: 'Pancakes at 09:00, kitchen on the 3rd floor.', range: '5 \u2013 9 October'
+  },
+  sr: {
+    intranet: 'Intranet', portal: 'OS BG portal', homeTitle: 'Sve za ovu nedelju', homeSub: 'Samo kratke beleške. Sve duže je na posebnoj stranici, jedan klik dalje.',
+    searchEmployee: 'Pronađi kolegu', searchPlaceholder: 'Ime ili prezime', searchHint: 'Unesi bar dva slova, pa pritisni Enter.', noHits: 'Nema kolege sa tim imenom.', fullProfile: 'Ceo profil', clear: 'Obriši', email: 'E-pošta',
+    weekTitle: 'Kratak pogled', today: 'Danas', thisWeek: 'Ova nedelja', upcoming: 'Uskoro', nothing: 'Ništa nije zakazano.', celebrate: 'Vreme za slavlje', slava: 'Krsna slava',
+    newEmployee: 'Novi kolega', hello: 'Zdravo', viewProfile: 'Profil', sayHello: 'Pozdravi',
+    officeTitle: 'Boravak u kancelariji', inCalendar: 'Kalendar', orderNow: 'Poruči', chatPlaceholder: 'Napiši poruku…', teamsSub: 'Teams grupa · Ručak', openTeams: 'Otvori u Teams-u', send: 'Pošalji', foodSub: 'Zajednička porudžbina · do {d}', openUntil: 'Otvoreno do {d}', ordered: 'Poručeno u {t}', stepOrder: 'Poruči', stepPay: 'Uplati', stepTrack: 'Prati', openOrder: 'Otvori porudžbinu', organizer: 'Organizuje', payee: 'Primalac', copy: 'Kopiraj', copied: 'Kopirano', trackDelivery: 'Prati dostavu', trackSoon: 'Nakon porudžbine', trackLater: 'Link stiže kad se poruči', eta: 'Stiže oko {t}', orderFood: 'Poruči hranu', orderFoodSub: 'Zajednička porudžbina do 11:00', adsTitle: 'Mali oglasi', handyman: 'Majstor Žile', handymanSub: 'Popravke, vodoinstalacije, sitni poslovi', parking: 'Parking', parkingNote: 'Četvrtak: garaža puna od 09:00. Mesto 12 ostaje slobodno za gosta.', foodNone: 'Još ništa nije planirano', usefulTitle: 'Korisne informacije', allLinks: 'Svi linkovi', recsTitle: 'Preporuke', more: 'Više', back: '\u2190 Nazad na početnu',
+    helpWith: 'Pitaj me o', sameTeam: 'Isti tim', details: 'Detalji', refer: 'Preporuči nekoga',
+    homemadeTitle: 'Mali oglasi', homemadeSub: 'Kupujem, prodajem, poklanjam. Javi se direktno kolegi, ostalo dogovarate međusobno.',
+    jobsTitle: 'Otvorene pozicije i preporuke', jobsSub: 'Znaš nekog dobrog? Preporuči ga i dobij bonus kada prođe probni rad.',
+    usefulPageSub: 'Linkovi koji se najčešće traže, grupisani da ih lako pregledaš.', recsPageSub: 'Kultura, pozorište i ideje za vikend od kolega.',
+    footer: 'Intranet \u00b7 samo za internu upotrebu', footerNote: 'Privremeni sadržaj \u2014 pravi sadržaj sledi',
+    navHome: 'Početna', navJobs: 'Poslovi', phone: 'Telefon', office: 'Lokacija', since: 'Sa nama od',
+    newNote: 'Nikola sedi na 3. spratu, pored kuhinje. Pozivi na kafu su dobrodošli.', tomorrow: 'Sutra', highlight: 'Palačinke u 09:00, kuhinja na 3. spratu.', range: '5 \u2013 9. oktobar'
+  },
+  de: {
+    intranet: 'Intranet', portal: 'OS BG Portal', homeTitle: 'Alles für diese Woche', homeSub: 'Nur kurze Notizen. Alles Längere steht auf einer eigenen Seite, einen Klick entfernt.',
+    searchEmployee: 'Kolleg:in finden', searchPlaceholder: 'Vor- oder Nachname', searchHint: 'Mindestens zwei Buchstaben eingeben, dann Enter.', noHits: 'Niemand mit diesem Namen.', fullProfile: 'Ganzes Profil', clear: 'Löschen', email: 'E-Mail',
+    weekTitle: 'Kurzer Blick', today: 'Heute', thisWeek: 'Diese Woche', upcoming: 'Demnächst', nothing: 'Nichts geplant.', celebrate: 'Zeit zum Feiern', slava: 'Slava',
+    newEmployee: 'Neuer Kollege', hello: 'Hallo', viewProfile: 'Profil', sayHello: 'Hallo sagen',
+    officeTitle: 'Büroleben', inCalendar: 'Kalender', orderNow: 'Bestellen', chatPlaceholder: 'Nachricht schreiben…', teamsSub: 'Teams-Gruppe · Mittagessen', openTeams: 'In Teams öffnen', send: 'Senden', foodSub: 'Sammelbestellung · bis {d}', openUntil: 'Offen bis {d}', ordered: 'Bestellt um {t}', stepOrder: 'Bestellen', stepPay: 'Bezahlen', stepTrack: 'Verfolgen', openOrder: 'Bestellung öffnen', organizer: 'Organisiert', payee: 'Empfänger', copy: 'Kopieren', copied: 'Kopiert', trackDelivery: 'Lieferung verfolgen', trackSoon: 'Nach der Bestellung', trackLater: 'Link folgt nach der Bestellung', eta: 'Ankunft gegen {t}', orderFood: 'Essen bestellen', orderFoodSub: 'Sammelbestellung bis 11:00', adsTitle: 'Kleinanzeigen', handyman: 'Majstor Žile', handymanSub: 'Reparaturen, Sanitär, Kleinarbeiten', parking: 'Parkplatz', parkingNote: 'Donnerstag: Garage ab 09:00 voll. Platz 12 bleibt für einen Gast frei.', foodNone: 'Noch nichts geplant', usefulTitle: 'Nützliche Informationen', allLinks: 'Alle Links', recsTitle: 'Empfehlungen', more: 'Mehr', back: '\u2190 Zurück zur Startseite',
+    helpWith: 'Frag mich zu', sameTeam: 'Gleiches Team', details: 'Details', refer: 'Empfehlen',
+    homemadeTitle: 'Kleinanzeigen', homemadeSub: 'Kaufen, verkaufen, verschenken. Schreib direkt an die Person; den Rest klärt ihr untereinander.',
+    jobsTitle: 'Offene Stellen & Empfehlungen', jobsSub: 'Du kennst jemand Gutes? Empfehle die Person und erhalte den Bonus nach der Probezeit.',
+    usefulPageSub: 'Die meistgefragten Links, übersichtlich gruppiert.', recsPageSub: 'Kultur, Theater und Wochenendideen von Kolleg:innen.',
+    footer: 'Intranet \u00b7 nur für internen Gebrauch', footerNote: 'Platzhalter \u2014 echte Inhalte folgen',
+    navHome: 'Start', navJobs: 'Stellen', phone: 'Telefon', office: 'Standort', since: 'Dabei seit',
+    newNote: 'Nikola sitzt in der 3. Etage, neben der Küche. Über Kaffee-Einladungen freut er sich.', tomorrow: 'Morgen', highlight: 'Pfannkuchen um 09:00, Küche in der 3. Etage.', range: '5. \u2013 9. Oktober'
+  }
+};
+
+const TODAY = { en: 'Wednesday, 7 October', sr: 'Sreda, 7. oktobar', de: 'Mittwoch, 7. Oktober' };
+
+const RT = {
+  en: { all: 'All', posts: 'posts', comment: 'Add a comment…', post: 'Post', poll: 'Poll', votes: 'votes', pollUntil: 'Voting until 20 Oct', sub: 'Tips from colleagues. Like, comment, add your own.', image: 'Photo', now: 'just now' },
+  sr: { all: 'Sve', posts: 'objave', comment: 'Dodaj komentar…', post: 'Objavi', poll: 'Anketa', votes: 'glasova', pollUntil: 'Glasanje do 20. okt.', sub: 'Preporuke kolega. Lajkuj, komentariši, dodaj svoju.', image: 'Fotografija', now: 'upravo' },
+  de: { all: 'Alle', posts: 'Beiträge', comment: 'Kommentar schreiben…', post: 'Posten', poll: 'Umfrage', votes: 'Stimmen', pollUntil: 'Abstimmung bis 20. Okt.', sub: 'Tipps von Kolleg:innen. Liken, kommentieren, selbst posten.', image: 'Foto', now: 'gerade eben' }
+};
+const RCATS = [
+  { key: 'culture', label: { en: 'Culture', sr: 'Kultura', de: 'Kultur' }, fg: '#003366', bg: '#DCEAF6', subs: [['theater', { en: 'Theater', sr: 'Pozorište', de: 'Theater' }], ['cinema', { en: 'Cinema', sr: 'Bioskop', de: 'Kino' }], ['concerts', { en: 'Concerts', sr: 'Koncerti', de: 'Konzerte' }], ['books', { en: 'Books', sr: 'Knjige', de: 'Bücher' }]] },
+  { key: 'weekend', label: { en: 'Weekend getaways', sr: 'Gde za vikend', de: 'Wohin am Wochenende' }, fg: '#2F6B47', bg: '#E3EFE7', subs: [['salas', { en: 'Farmsteads', sr: 'Salaši', de: 'Salaši' }], ['wellness', { en: 'Wellness', sr: 'Wellness', de: 'Wellness' }], ['trips', { en: 'Day trips', sr: 'Izleti', de: 'Ausflüge' }], ['mountains', { en: 'Mountains', sr: 'Planine', de: 'Berge' }]] },
+  { key: 'gastro', label: { en: 'Gastro corner', sr: 'Gastro kutak', de: 'Gastro-Ecke' }, fg: '#7A5429', bg: '#F3EADF', subs: [['recipes', { en: 'Recipes', sr: 'Recepti', de: 'Rezepte' }], ['restaurants', { en: 'Restaurants', sr: 'Restorani', de: 'Restaurants' }], ['coffee', { en: 'Coffee & sweets', sr: 'Kafa i slatko', de: 'Kaffee & Süßes' }]] }
+];
+const RPOSTS = [
+  { id: 'p1', cat: 'culture', sub: 'theater', who: 'mp', time: '2 h', title: 'Hipnoza jedne ljubavi, Atelje 212', text: 'Gledala sinoć, odlična glumačka podela i duhovit tekst. Za subotu još ima karata.', meta: 'Atelje 212 · subota 20:00', likes: 14, comments: [{ who: 'ri', text: 'Idem u subotu, ko je za?', time: '1 h' }, { who: 'nm', text: 'Mogu da sredim grupne karte.', time: '40 min' }] },
+  { id: 'p2', cat: 'culture', sub: 'cinema', who: 'sdj', time: '5 h', title: 'Festival autorskog filma, Kinoteka', text: 'Cele nedelje projekcije, pretpremijere i razgovori sa rediteljima.', meta: 'Kinoteka · do 30. okt.', likes: 9, comments: [{ who: 'ij', text: 'Preporučujem utorak, gost je reditelj.', time: '3 h' }] },
+  { id: 'p3', cat: 'culture', sub: 'concerts', who: 'nm', time: '1 d', title: 'Beogradska filharmonija, Kolarac', text: 'Na programu Dvoržak i Brams. Karte se brzo rasprodaju.', meta: 'Kolarac · 29. okt. 20:00', likes: 11, comments: [] },
+  { id: 'p4', cat: 'culture', sub: 'books', who: 'ij', time: '2 d', title: 'Knjiga meseca: Na Drini ćuprija', text: 'Čitamo zajedno do kraja meseca, razgovor uz kafu 31. oktobra.', meta: 'Polica u kuhinji, 3. sprat', likes: 7, comments: [{ who: 'mp', text: 'Ja sam unutra!', time: '1 d' }] },
+  { id: 'p5', cat: 'weekend', sub: 'salas', who: 'ri', time: '3 h', title: 'Salaš 137, Čenej', text: 'Domaća kuhinja, konji i mir. Idealno za porodicu, sat vremena od Beograda.', meta: 'Čenej · oko 1 h vožnje', likes: 18, comments: [{ who: 'pk', text: 'Bili smo leto, doručak je odličan.', time: '2 h' }, { who: 'lb', text: 'Treba li rezervacija?', time: '1 h' }, { who: 'ri', text: 'Vikendom obavezno.', time: '50 min' }] },
+  { id: 'p6', cat: 'weekend', sub: 'wellness', who: 'pk', time: '1 d', title: 'Wellness vikend na Zlatiboru', text: 'Bazen, sauna i šetnje kroz borovu šumu. Paket za dve noći je povoljan van sezone.', meta: 'Zlatibor · oko 3 h vožnje', likes: 12, comments: [] },
+  { id: 'p7', cat: 'weekend', sub: 'trips', who: 'lb', time: '2 d', title: 'Uvac i beloglavi supovi', text: 'Vožnja čamcem kroz meandre i vidikovac Molitva. Ponesite dvogled.', meta: 'Uvac · ceo dan', likes: 16, comments: [{ who: 'sdj', text: 'Najlepši pogled u Srbiji.', time: '1 d' }] },
+  { id: 'p8', cat: 'weekend', sub: 'mountains', who: 'aw', time: '4 d', title: 'Rtanj, uspon do vrha', text: 'Oko tri sata uspona, lagano tempo. Najbolje krenuti rano ujutru.', meta: 'Rtanj · ceo dan', likes: 8, comments: [] },
+  { id: 'p9', cat: 'gastro', sub: 'recipes', who: 'ij', time: '4 h', title: 'Gibanica moje bake', text: 'Kore, sir, jaja, kisela voda i malo strpljenja. Recept je u komentarima.', meta: 'Recept · oko 1 h', likes: 21, comments: [{ who: 'ij', text: '6 jaja, 500 g sira, pakovanje kora, 200 ml kisele vode, 100 ml ulja. 200 °C, 40 min.', time: '4 h' }, { who: 'nm', text: 'Probaću za vikend!', time: '2 h' }] },
+  { id: 'p10', cat: 'gastro', sub: 'restaurants', who: 'nm', time: '1 d', title: 'Tri šešira, Skadarlija', text: 'Klasika za goste iz inostranstva: muzika, roštilj i dobra atmosfera.', meta: 'Skadarlija · preporučena rezervacija', likes: 10, comments: [] },
+  { id: 'p11', cat: 'gastro', sub: 'coffee', who: 'mp', time: '3 d', title: 'Najbolja kafa blizu kancelarije', text: 'Mala pržionica na pet minuta hoda. Flat white vredi šetnje.', meta: '5 min peške', likes: 13, comments: [{ who: 'aw', text: 'Potvrđujem!', time: '3 d' }] }
+];
+const POLL = { q: { en: 'Where should the November team trip go?', sr: 'Gde ide timski izlet u novembru?', de: 'Wohin geht der Teamausflug im November?' }, opts: [['fg', { en: 'Fruška gora', sr: 'Fruška gora', de: 'Fruška gora' }, 12], ['zl', { en: 'Zlatibor', sr: 'Zlatibor', de: 'Zlatibor' }, 8], ['sa', { en: 'A salaš in Vojvodina', sr: 'Salaš u Vojvodini', de: 'Salaš in der Vojvodina' }, 15]] };
+
+const GT = {
+  en: { title: 'Gallery', sub: 'Photos from team events and everyday office life.', photos: 'photos', back: '\u2190 Back to home', backGal: '\u2190 All albums' },
+  sr: { title: 'Galerija', sub: 'Fotografije sa timskih događaja i iz svakodnevice u kancelariji.', photos: 'fotografija', back: '\u2190 Nazad na početnu', backGal: '\u2190 Svi albumi' },
+  de: { title: 'Galerie', sub: 'Fotos von Team-Events und aus dem Büroalltag.', photos: 'Fotos', back: '\u2190 Zurück zur Startseite', backGal: '\u2190 Alle Alben' }
+};
+const GALLERY = [
+  { id: 'run', name: { en: 'Business Run 2026', sr: 'Business Run 2026', de: 'Business Run 2026' }, date: { en: 'September 2026', sr: 'septembar 2026.', de: 'September 2026' }, count: 24, fg: '#003366', bg: ['#DCEAF6', '#C9DEF0', '#E6F0F9'] },
+  { id: 'ny', name: { en: 'New Year party', sr: 'Nova godina', de: 'Neujahrsfeier' }, date: { en: 'December 2025', sr: 'decembar 2025.', de: 'Dezember 2025' }, count: 48, fg: '#7A5429', bg: ['#F3EADF', '#E9D9C2', '#F8F2EA'] },
+  { id: 'day', name: { en: 'Everyday life', sr: 'Svakodnevica', de: 'Büroalltag' }, date: { en: 'Ongoing', sr: 'stalno se dopunjuje', de: 'laufend' }, count: 36, fg: '#2F6B47', bg: ['#E3EFE7', '#D3E6DA', '#EEF5F0'] },
+  { id: 'trip', name: { en: 'Team trip, Fruška gora', sr: 'Timski izlet, Fruška gora', de: 'Teamausflug, Fruška gora' }, date: { en: 'June 2026', sr: 'jun 2026.', de: 'Juni 2026' }, count: 18, fg: '#2F6B47', bg: ['#D3E6DA', '#E3EFE7', '#EEF5F0'] },
+  { id: 'slava', name: { en: 'Slavas & birthdays', sr: 'Slave i rođendani', de: 'Slavas & Geburtstage' }, date: { en: '2026', sr: '2026.', de: '2026' }, count: 15, fg: '#003366', bg: ['#E6F0F9', '#DCEAF6', '#C9DEF0'] }
+];
+
+class SeasonLayer extends React.Component {
+  constructor(p) { super(p); this.ref = React.createRef(); }
+  componentDidMount() { this.start(); }
+  componentDidUpdate(pp) { if (pp.season !== this.props.season || pp.always !== this.props.always) { this.stop(); this.start(); } }
+  componentWillUnmount() { this.stop(); }
+  stop() { cancelAnimationFrame(this.raf); if (this.onResize) window.removeEventListener('resize', this.onResize); }
+  start() {
+    const c = this.ref.current; if (!c) return;
+    const s = this.props.season, ctx = c.getContext('2d');
+    this.onResize = () => { const d = window.devicePixelRatio || 1; c.width = innerWidth * d; c.height = innerHeight * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
+    this.onResize(); window.addEventListener('resize', this.onResize);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    const reduce = !this.props.always && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (s === 'off') return;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const PAL = { winter: ['#7FA9D6', '#5F93C9', '#9DC0E3'], autumn: ['#C98A4B', '#B5652E', '#D9A441', '#8A6134'], spring: ['#EFA9BA', '#F4C2CE', '#E8B07E', '#9CC47F'], summer: ['#6FA6DA', '#E2B54D'] }[s] || ['#A3C6E6'];
+    const N = { winter: 90, autumn: 34, spring: 45, summer: 32 }[s] || 50;
+    const up = s === 'summer';
+    const make = (y) => ({ x: rnd(0, innerWidth), y: y == null ? rnd(0, innerHeight) : y,
+      r: s === 'winter' ? rnd(4, 8) : rnd(8, 13), vy: up ? rnd(-0.5, -0.2) : s === 'winter' ? rnd(0.4, 1.1) : rnd(0.6, 1.2),
+      sw: rnd(0.5, 1.5), ph: rnd(0, 6.28), rot: rnd(0, 6.28), vr: rnd(-0.02, 0.02), col: PAL[Math.floor(Math.random() * PAL.length)], a: rnd(0.7, 1) });
+    const parts = Array.from({ length: N }, () => make());
+    let t = 0;
+    const draw = () => {
+      ctx.clearRect(0, 0, innerWidth, innerHeight); t++;
+      for (const p of parts) {
+        p.y += p.vy; p.x += Math.sin(t * 0.01 * p.sw + p.ph) * 0.5; p.rot += p.vr;
+        if (!up && p.y > innerHeight + 20) Object.assign(p, make(-20));
+        if (up && p.y < -20) Object.assign(p, make(innerHeight + 20));
+        ctx.save(); ctx.globalAlpha = p.a; ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        if (s === 'winter') {
+          ctx.strokeStyle = p.col; ctx.lineWidth = 1.7; ctx.lineCap = 'round'; ctx.beginPath();
+          for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3, dx = Math.cos(a) * p.r, dy = Math.sin(a) * p.r; ctx.moveTo(-dx, -dy); ctx.lineTo(dx, dy); }
+          ctx.stroke();
+        } else if (s === 'autumn') {
+          ctx.fillStyle = p.col; ctx.beginPath(); ctx.ellipse(0, 0, p.r, p.r * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-p.r, 0); ctx.lineTo(p.r, 0); ctx.stroke();
+        } else if (s === 'spring') {
+          ctx.fillStyle = p.col; ctx.beginPath(); ctx.ellipse(0, 0, p.r * 0.7, p.r * 0.42, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = 'rgba(120,60,70,.25)'; ctx.lineWidth = 0.8; ctx.stroke();
+        } else {
+          ctx.strokeStyle = p.col; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.arc(0, 0, p.r * 0.6, 0, Math.PI * 2); ctx.stroke();
+        }
+        ctx.restore();
+      }
+      if (!reduce) this.raf = requestAnimationFrame(draw);
+    };
+    draw();
+  }
+  render() { return React.createElement('canvas', { ref: this.ref, 'aria-hidden': true, style: { position: 'fixed', left: 0, top: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 40 } }); }
+}
+
+class Component extends DCLogic {
+  state = { usefulOpen: 0, calY: 2026, calM: 9, selDate: TODAY_KEY, lang: null, page: null, sq: '', foundId: null, personId: 'nt', recTab: 'all', jobDept: 'all' };
+
+  get lang() { return this.state.lang || this.props.defaultLanguage || 'sr'; }
+  L(o) { if (o == null) return ''; if (typeof o !== 'object' || Array.isArray(o)) return o; return o[this.lang] !== undefined ? o[this.lang] : o.en; }
+
+  go(page) { return (e) => { if (e) e.preventDefault(); this.setState({ page }); window.scrollTo(0, 0); }; }
+  openPerson(id) { return (e) => { if (e) e.preventDefault(); this.setState({ page: 'person', personId: id }); window.scrollTo(0, 0); }; }
+
+  matches(q) {
+    q = q.trim().toLowerCase();
+    if (q.length < 2) return [];
+    const norm = (s) => s.toLowerCase().replace(/đ/g, 'dj').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const nq = norm(q);
+    return PEOPLE.filter(p => norm(p.name).split(' ').some(w => w.indexOf(nq) === 0) || norm(p.name).indexOf(nq) === 0).slice(0, 5);
+  }
+
+  pill(active) {
+    return 'height: 32px; padding: 0 14px; border-radius: 999px; border: 1px solid ' + (active ? '#003366' : '#DCE0E6')
+      + '; background: ' + (active ? '#003366' : '#FFFFFF') + '; color: ' + (active ? '#FFFFFF' : '#6B7178')
+      + '; font-size: 12px; font-weight: 600; cursor: pointer;';
+  }
+  navBtn(active) {
+    return 'height: 34px; padding: 0 14px; border: 0; border-radius: 999px; background: ' + (active ? '#E4E8EE' : 'transparent')
+      + '; color: ' + (active ? '#1F2429' : '#6B7178') + '; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex: 0 0 auto;';
+  }
+  langBtn(active) {
+    return 'height: 28px; padding: 0 12px; border: 0; border-radius: 999px; background: ' + (active ? '#4A7FB5' : 'transparent')
+      + '; color: ' + (active ? '#FFFFFF' : '#80868E') + '; font-size: 12px; font-weight: 700; cursor: pointer;';
+  }
+  dayCol(today) {
+    return 'display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 12px; min-height: 200px; border: 1px solid '
+      + (today ? '#003366' : '#EAEDF1') + '; background: ' + (today ? '#DCEAF6' : '#FAFBFC') + ';';
+  }
+
+  itemVals(e) {
+    const c = TYPE_COLORS[e.type];
+    return {
+      isBday: e.type === 'bday', isSlava: e.type === 'slava', isEvent: e.type === 'event', isOffice: e.type === 'food', isHoliday: e.type === 'holiday',
+      iconStyle: 'width: 16px; height: 16px; border-radius: 5px; display: grid; place-items: center; flex: 0 0 auto; color: ' + c[0] + '; background: ' + c[1] + ';'
+    };
+  }
+
+  calendarVals(lang) {
+    const L = (o) => this.L(o), y = this.state.calY, m = this.state.calM, sel = this.state.selDate;
+    const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
+    const start = new Date(y, m, 1 - ((first.getDay() + 6) % 7));
+    const todayD = new Date(2026, 9, 7), todayWeekStart = ymd(new Date(2026, 9, 7 - ((todayD.getDay() + 6) % 7)));
+    const weeks = [];
+    for (let r = 0; r < 6; r++) {
+      const ws = new Date(start.getFullYear(), start.getMonth(), start.getDate() + r * 7);
+      if (ws > last) break;
+      const isCur = ymd(ws) === todayWeekStart;
+      const days = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + i), key = ymd(d);
+        const evs = CAL.filter(e => e.date === key).sort(byTime);
+        const isPast = key < TODAY_KEY;
+        const inMonth = d.getMonth() === m, isToday = key === TODAY_KEY, isSel = key === sel, wknd = i > 4;
+        days.push({
+          num: d.getDate(),
+          items: evs.slice(0, 1).map(e => Object.assign(this.itemVals(e), { short: L(e.text) })),
+          hasMore: evs.length > 1, more: '+' + (evs.length - 1),
+          style: 'display: flex; flex-direction: column; gap: 3px; align-items: stretch; text-align: left; min-width: 0; min-height: 56px; padding: 6px; cursor: pointer; font-family: inherit;'
+            + (isCur ? ' border-radius: 6px; border: 1px solid #A3C6E6; background: ' + (wknd ? '#C9DEF0' : '#D6E7F5') + '; color: #1F2429; font-weight: 700;'
+                     : ' border-radius: 0; border: 0; background: ' + (wknd ? '#E4EEF8' : (isPast ? '#F6F7F9' : '#FFFFFF')) + '; color: ' + (isPast ? '#989EA6' : '#2A2F35') + '; font-weight: 600;')
+            + (isSel ? ' box-shadow: inset 0 0 0 2px ' + (isCur ? '#001F40' : '#003366') + ';' : '')
+            + (inMonth ? '' : ' opacity: .5;'),
+          numStyle: 'align-self: flex-start; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; display: grid; place-items: center; font-size: 12px; font-weight: 700; '
+            + (isToday ? 'background: #4A7FB5; color: #FFFFFF;' : 'color: ' + (wknd ? '#3D73A8' : (isPast && !isCur ? '#B0B5BC' : '#1F2429')) + ';'),
+          onClick: () => this.setState({ selDate: key, calY: d.getFullYear(), calM: d.getMonth() })
+        });
+      }
+      weeks.push({ days, style: 'display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: ' + (isCur ? '4px' : '1px') + '; padding: ' + (isCur ? '5px' : '0') + '; background: ' + (isCur ? '#003366' : '#D5DAE1') + ';' });
+    }
+    const sd = new Date(sel + 'T00:00:00');
+    const selEvs = CAL.filter(e => e.date === sel).sort(byTime);
+    const dayName = WDAYS_LONG[lang][(sd.getDay() + 6) % 7];
+    const selLabel = lang === 'en' ? dayName + ', ' + sd.getDate() + ' ' + MONTHS.en[sd.getMonth()] : dayName + ', ' + sd.getDate() + '. ' + MONTHS[lang][sd.getMonth()];
+    const shift = (n) => () => { const nd = new Date(y, m + n, 1); this.setState({ calY: nd.getFullYear(), calM: nd.getMonth() }); };
+    return {
+      weeks, wdays: WDAYS[lang],
+      monthLabel: (lang === 'sr' ? MONTHS.sr[m].charAt(0).toUpperCase() + MONTHS.sr[m].slice(1) : MONTHS[lang][m]) + ' ' + y,
+      prevMonth: shift(-1), nextMonth: shift(1),
+      goToday: () => this.setState({ calY: 2026, calM: 9, selDate: TODAY_KEY }),
+      legend: Object.keys(TYPE_LABELS).map(k => Object.assign(this.itemVals({ type: k }), { label: L(TYPE_LABELS[k]) })),
+      selLabel: (sel === TODAY_KEY ? T[lang].today + ' \u00b7 ' : '') + selLabel,
+      selItems: selEvs.map(e => Object.assign(this.itemVals(e), { cardStyle: 'flex: 1 1 calc(' + (100 / Math.min(Math.max(selEvs.length, 1), 4)) + '% - 8px); min-width: 150px; box-sizing: border-box; display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: start; gap: 8px; padding: 10px 12px; background: #F5F8FB; border: 1px solid #E2E5EA; border-radius: 10px;', time: e.time ? L(e.time) : '\u2014', text: L(e.text), who: e.who ? L(e.who) : L(TYPE_LABELS[e.type]) })),
+      selEmpty: selEvs.length === 0
+    };
+  }
+
+  upcomingVals(lang) {
+    const L = (o) => this.L(o), t0 = new Date(TODAY_KEY + 'T00:00:00');
+    const MS = { en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], sr: ['jan.','feb.','mar.','apr.','maj','jun','jul','avg.','sep.','okt.','nov.','dec.'], de: ['Jan.','Feb.','März','Apr.','Mai','Juni','Juli','Aug.','Sep.','Okt.','Nov.','Dez.'] };
+    return CAL.filter(e => e.date >= TODAY_KEY && (e.type === 'bday' || e.type === 'slava' || e.type === 'holiday')).slice(0, 8).map(e => {
+      const d = new Date(e.date + 'T00:00:00'), n = Math.round((d - t0) / 86400000);
+      const rel = n === 0 ? T[lang].today : n === 1 ? ({ en: 'Tomorrow', sr: 'Sutra', de: 'Morgen' })[lang] : ({ en: 'in ' + n + ' days', sr: 'za ' + n + ' dana', de: 'in ' + n + ' Tagen' })[lang];
+      return Object.assign(this.itemVals(e), {
+        text: L(e.text), who: e.who ? L(e.who) : L(TYPE_LABELS[e.type]),
+        date: lang === 'en' ? d.getDate() + ' ' + MS.en[d.getMonth()] : d.getDate() + '. ' + MS[lang][d.getMonth()], rel,
+        onClick: () => this.setState({ selDate: e.date, calY: d.getFullYear(), calM: d.getMonth() })
+      });
+    });
+  }
+
+  foodVals(lang) {
+    const t = T[lang], o = FOOD_ORDER, ordered = this.props.foodOrdered === true;
+    return {
+      ordered, notOrdered: !ordered, orderUrl: o.orderUrl, trackUrl: o.trackUrl, account: o.account,
+      sub: t.foodSub.replace('{d}', o.deadline),
+      organizer: t.organizer + ': ' + o.organizer,
+      payee: t.payee + ': ' + o.payee,
+      trackNote: ordered ? t.eta.replace('{t}', o.eta) : t.trackLater,
+      pill: ordered ? t.ordered.replace('{t}', o.orderedAt) : t.openUntil.replace('{d}', o.deadline),
+      pillStyle: 'flex: 0 0 auto; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; ' + (ordered ? 'background: #003366; color: #FFFFFF;' : 'background: #FFFFFF; color: #7A5429; border: 1px solid #E6D5C0;'),
+      copyLabel: this.state.copied ? t.copied : t.copy,
+      stepLabel: ordered ? t.stepTrack : t.stepOrder,
+      mainUrl: ordered ? o.trackUrl : o.orderUrl,
+      mainLabel: ordered ? t.trackDelivery : t.openOrder,
+      mainNote: ordered ? t.eta.replace('{t}', o.eta) : t.organizer + ': ' + o.organizer,
+      mainStyle: 'flex: 1 1 150px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; border-radius: 8px; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none; background: ' + (ordered ? '#003366' : '#8A6134') + ';',
+      stepDot: 'width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; color: #FFFFFF; font-size: 10px; letter-spacing: 0; background: ' + (ordered ? '#003366' : '#8A6134') + ';',
+      onCopy: () => { try { navigator.clipboard.writeText(o.account.replace(/\s/g, '')); } catch (err) {} this.setState({ copied: true }); clearTimeout(this._ct); this._ct = setTimeout(() => this.setState({ copied: false }), 1600); }
+    };
+  }
+
+  chatRef = React.createRef();
+  scrollChat() { const el = this.chatRef.current; if (el) el.scrollTop = el.scrollHeight; }
+  componentDidMount() { this.scrollChat(); }
+  sendChat() {
+    const txt = (this.state.chatDraft || '').trim(); if (!txt) return;
+    const d = new Date(), time = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    this.setState({ chat: (this.state.chat || CHAT).concat([{ who: 'me', text: txt, time }]), chatDraft: '' }, () => requestAnimationFrame(() => this.scrollChat()));
+  }
+  chatVals(lang) {
+    const t = T[lang], msgs = (this.state.chat || CHAT).slice();
+    return {
+      chatRef: this.chatRef, chatDraft: this.state.chatDraft || '',
+      onChatDraft: (e) => this.setState({ chatDraft: e.target.value }),
+      onChatKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.sendChat(); } },
+      onChatSend: () => this.sendChat(),
+      chatList: msgs.map(m => {
+        const p = m.who && m.who !== 'me' ? PEOPLE.find(x => x.id === m.who) : null;
+        return { isSystem: !!m.sys, isMe: m.who === 'me', isOther: !!p, text: m.text, time: m.time, name: p ? p.name.split(' ')[0] + ' ' + p.name.split(' ')[1].charAt(0) + '.' : '', initials: p ? p.initials : '' };
+      })
+    };
+  }
+
+  recVals(lang) {
+    const L = (o) => this.L(o), rt = RT[lang], st = this.state;
+    const cat = st.recCat || 'culture', sub = st.recSub || 'all', likes = st.recLikes || {}, added = st.recComments || {}, drafts = st.recDrafts || {};
+    const person = (id) => PEOPLE.find(p => p.id === id) || PEOPLE[0];
+    const sn = (id) => { const n = person(id).name.split(' '); return n[0] + ' ' + n[1].charAt(0) + '.'; };
+    const C = RCATS.find(c => c.key === cat) || RCATS[0];
+    const flags = (k) => ({ is_culture: k === 'culture', is_weekend: k === 'weekend', is_gastro: k === 'gastro', is_poll: k === 'poll' });
+    const vote = st.pollVote || null;
+    const total = POLL.opts.reduce((a, o) => a + o[2] + (vote === o[0] ? 1 : 0), 0);
+    const poll = { q: L(POLL.q), until: rt.pollUntil, label: rt.poll, total: total + ' ' + rt.votes,
+      opts: POLL.opts.map(o => { const me = vote === o[0], v = o[2] + (me ? 1 : 0), pct = Math.round(v / total * 100);
+        return { label: L(o[1]), pct: pct + '%', onClick: () => this.setState({ pollVote: me ? null : o[0] }),
+          style: 'position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 7px 10px; border-radius: 8px; border: 1px solid ' + (me ? '#003366' : '#CFE1F2') + '; background: #FFFFFF; cursor: pointer; font-family: inherit; text-align: left;',
+          barStyle: 'position: absolute; left: 0; top: 0; bottom: 0; width: ' + pct + '%; background: ' + (me ? '#BFD7EE' : '#E6F0F9') + '; transition: width 400ms cubic-bezier(.19,1,.22,1);',
+          textStyle: 'position: relative; font-size: 12px; font-weight: ' + (me ? '700' : '600') + '; color: #1F2429;' }; }) };
+    return {
+      rt, poll,
+      rcHome: RCATS.map(c => { const ps = RPOSTS.filter(p => p.cat === c.key);
+        return Object.assign(flags(c.key), { label: L(c.label), subs: c.subs.map(s => L(s[1])).join(' · '), latest: ps[0] ? ps[0].title : '', count: ps.length + ' ' + rt.posts,
+          iconStyle: 'width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: ' + c.fg + '; background: ' + c.bg + ';',
+          onClick: () => { this.setState({ page: 'recs', recCat: c.key, recSub: 'all' }); window.scrollTo(0, 0); } }); }),
+      isPollTab: cat === 'poll', showSubs: cat !== 'poll',
+      rcTabs: RCATS.concat([{ key: 'poll', label: { en: 'Poll', sr: 'Anketa', de: 'Umfrage' }, fg: '#3D73A8', bg: '#E6F0F9' }]).map(c => { const a = c.key === cat;
+        return Object.assign(flags(c.key), { label: L(c.label), onClick: () => this.setState({ recCat: c.key, recSub: 'all' }),
+          style: 'display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 7px; border-radius: 999px; border: 1px solid ' + (a ? c.fg : '#DCE0E6') + '; background: ' + (a ? c.fg : '#FFFFFF') + '; color: ' + (a ? '#FFFFFF' : '#474C53') + '; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer;',
+          iconStyle: 'width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: ' + (a ? 'rgba(255,255,255,.18)' : c.bg) + '; color: ' + (a ? '#FFFFFF' : c.fg) + ';' }); }),
+      rcSubs: [['all', rt.all]].concat(C.subs.map(s => [s[0], L(s[1])])).map(([k, l]) => ({ label: l, onClick: () => this.setState({ recSub: k }), style: this.pill(sub === k) })),
+      rcPosts: RPOSTS.filter(p => p.cat === cat && (sub === 'all' || p.sub === sub)).map(p => {
+        const liked = !!likes[p.id], cm = p.comments.concat(added[p.id] || []), s = C.subs.find(x => x[0] === p.sub);
+        const send = () => { const d = ((this.state.recDrafts || {})[p.id] || '').trim(); if (!d) return; const ac = this.state.recComments || {};
+          this.setState({ recComments: Object.assign({}, ac, { [p.id]: (ac[p.id] || []).concat([{ who: 'sdj', text: d, time: rt.now }]) }), recDrafts: Object.assign({}, this.state.recDrafts || {}, { [p.id]: '' }) }); };
+        return Object.assign(flags(p.cat), {
+          title: p.title, text: p.text, meta: p.meta, time: p.time, author: person(p.who).name, initials: person(p.who).initials, tag: s ? L(s[1]) : '',
+          tagStyle: 'flex: 0 0 auto; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; color: ' + C.fg + '; background: ' + C.bg + ';',
+          imgStyle: 'width: 76px; height: 76px; border-radius: 14px; display: grid; place-items: center; color: ' + C.fg + '; background: ' + C.bg + ';', ['s_' + p.sub]: true,
+          likes: String(p.likes + (liked ? 1 : 0)), ccount: String(cm.length),
+          heartFill: liked ? '#3D6E9F' : 'none', heartStyle: 'display: flex; color: ' + (liked ? '#3D6E9F' : '#474C53') + ';',
+          onLike: () => this.setState({ recLikes: Object.assign({}, this.state.recLikes || {}, { [p.id]: !liked }) }),
+          comments: cm.map(c => ({ name: sn(c.who), text: c.text, time: c.time })),
+          draft: drafts[p.id] || '',
+          onDraft: (e) => this.setState({ recDrafts: Object.assign({}, this.state.recDrafts || {}, { [p.id]: e.target.value }) }),
+          onKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } },
+          onSend: send
+        }); })
+    };
+  }
+
+  galleryVals(lang) {
+    const L = (o) => this.L(o), gt = GT[lang], st = this.state;
+    const page = st.page || this.props.startPage || 'home', cur = GALLERY.find(g => g.id === st.galFolder);
+    const tile = (bg, fg, big) => 'display: grid; place-items: center; background: ' + bg + '; color: ' + fg + ';' + (big ? ' grid-row: span 2; opacity: 1;' : '');
+    return {
+      gt, isGallery: page === 'gallery',
+      galChips: GALLERY.slice(0, 3).map(g => ({ label: L(g.name) })),
+      galCount: GALLERY.length + ' \u203a',
+      goGallery: () => { this.setState({ page: 'gallery', galFolder: null }); window.scrollTo(0, 0); },
+      galBack: () => { if (cur) this.setState({ galFolder: null }); else this.setState({ page: 'home' }); window.scrollTo(0, 0); },
+      galBackLabel: cur ? gt.backGal : gt.back,
+      galHeading: cur ? L(cur.name) : gt.title,
+      galSub: cur ? L(cur.date) + ' \u00b7 ' + cur.count + ' ' + gt.photos : gt.sub,
+      galShowFolders: !cur, galShowPhotos: !!cur,
+      galFolders: GALLERY.map(g => ({ name: L(g.name), meta: g.count + ' ' + gt.photos + ' \u00b7 ' + L(g.date),
+        c1: tile(g.bg[0], g.fg, true), c2: tile(g.bg[1], g.fg), c3: tile(g.bg[2], g.fg),
+        iconStyle: 'width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; flex: 0 0 auto; color: ' + g.fg + '; background: ' + g.bg[0] + ';',
+        onClick: () => { this.setState({ galFolder: g.id }); window.scrollTo(0, 0); } })),
+      galPhotos: cur ? Array.from({ length: cur.count }, (_, i) => ({ style: 'aspect-ratio: 1; border-radius: 10px; display: grid; place-items: center; color: ' + cur.fg + '; background: ' + cur.bg[i % 3] + '; opacity: .9;' })) : []
+    };
+  }
+
+  renderVals() {
+    return Object.assign(this.baseVals(), this.calendarVals(this.lang), { showNewcomer: this.props.showNewcomer === true, showUpcoming: true, food: this.foodVals(this.lang), ...this.chatVals(this.lang), ...this.recVals(this.lang), ...this.galleryVals(this.lang), seasonLayer: React.createElement(SeasonLayer, { always: this.props.animateAlways !== false, season: (() => { const s = this.props.season || 'winter'; if (s !== 'auto') return s; const m = new Date().getMonth(); return m === 11 || m < 2 ? 'winter' : m < 5 ? 'spring' : m < 8 ? 'summer' : 'autumn'; })() }), upcoming: this.upcomingVals(this.lang) });
+  }
+
+  baseVals() {
+    const lang = this.lang, t = T[lang], L = (o) => this.L(o);
+    const st = Object.assign({}, this.state, { page: this.state.page || this.props.startPage || 'home' });
+    const sugg = st.foundId ? [] : this.matches(st.sq);
+    const found = st.foundId ? PEOPLE.find(p => p.id === st.foundId) : null;
+    const qLen = st.sq.trim().length;
+    const person = PEOPLE.find(p => p.id === st.personId) || PEOPLE[0];
+    const newIdx = (this.state.newIdx || 0) % NEWCOMERS.length;
+    const newcomer = PEOPLE.find(p => p.id === NEWCOMERS[newIdx]);
+    const recLabel = { all: { en: 'All', sr: 'Sve', de: 'Alle' }, culture: RECS[0].tag, theater: RECS[2].tag, weekend: RECS[4].tag, food: RECS[6].tag };
+
+    return {
+      t, todayLabel: L(TODAY), weekRange: t.range,
+      isHome: st.page === 'home', isPerson: st.page === 'person', isHomemade: st.page === 'homemade',
+      isJobs: st.page === 'jobs', isUseful: st.page === 'useful', isRecs: st.page === 'recs',
+      goHome: this.go('home'), goUseful: this.go('useful'), goRecs: this.go('recs'),
+
+      langBtns: [['sr', 'SR'], ['en', 'EN'], ['de', 'DE']].map(([k, l]) => ({ label: l, style: this.langBtn(lang === k), onClick: () => this.setState({ lang: k }) })),
+      navItems: [['home', t.navHome], ['useful', t.usefulTitle], ['recs', t.recsTitle], ['homemade', t.homemadeTitle], ['jobs', t.navJobs]]
+        .map(([k, l]) => ({ label: l, style: this.navBtn(st.page === k), onClick: this.go(k) })),
+
+      sq: st.sq, hasSq: qLen > 0,
+      onSq: (e) => this.setState({ sq: e.target.value, foundId: null }),
+      onSqKey: (e) => {
+        if (e.key === 'Enter') { const m = this.matches(this.state.sq); if (m.length) { this.setState({ sq: '' }); this.openPerson(m[0].id)(); } }
+        if (e.key === 'Escape') this.setState({ sq: '', foundId: null });
+      },
+      clearSq: () => this.setState({ sq: '', foundId: null }),
+      showHint: true,
+      showSuggest: sugg.length > 0,
+      showNoHits: qLen >= 2 && !found && sugg.length === 0,
+      suggestions: sugg.map((p, i) => ({
+        name: p.name, hint: i === 0 ? '\u21b5 Enter' : '',
+        style: 'display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; padding: 10px 12px; border: 0; background: ' + (i === 0 ? '#EEF5FB' : '#FFFFFF') + '; cursor: pointer;' + (i > 0 ? ' border-top: 1px solid #EAEDF1;' : ''),
+        onPick: () => { this.setState({ sq: '' }); this.openPerson(p.id)(); }
+      })),
+      hasFound: !!found,
+      found: found ? { initials: found.initials, name: found.name, role: L(found.role), email: found.email, mailto: 'mailto:' + found.email, onOpen: this.openPerson(found.id) } : {},
+
+      weekDays: WEEK.map((d, i) => ({ short: L(d.short), date: d.date, isToday: i === TODAY_INDEX, style: this.dayCol(i === TODAY_INDEX), items: d.items.map(it => ({ time: L(it.time), text: L(it.text) })) })),
+      celebrations: CELEBRATIONS.map(c => ({ initials: c.initials, name: c.name, what: L(c.what), when: L(c.when) })),
+      slavaList: SLAVA.map(s => ({ name: L(s.name), date: L(s.date), people: s.people })),
+
+      newcomer: { initials: newcomer.initials, greeting: t.hello + ', ' + newcomer.first + '!', role: L(newcomer.role), note: L(NEW_NOTES[newcomer.id]), mailto: 'mailto:' + newcomer.email, onOpen: this.openPerson(newcomer.id) },
+      multiNew: NEWCOMERS.length > 1,
+      newcomerTitle: NEWCOMERS.length > 1 ? ({ en: 'New colleagues', sr: 'Nove kolege', de: 'Neue Kolleg:innen' })[lang] : t.newEmployee,
+      newcomerPos: (newIdx + 1) + ' / ' + NEWCOMERS.length,
+      prevNew: () => this.setState({ newIdx: (newIdx - 1 + NEWCOMERS.length) % NEWCOMERS.length }),
+      nextNew: () => this.setState({ newIdx: (newIdx + 1) % NEWCOMERS.length }),
+      newDots: NEWCOMERS.map((id, i) => ({ onClick: () => this.setState({ newIdx: i }), style: 'width: ' + (i === newIdx ? '18px' : '7px') + '; height: 7px; padding: 0; border: 0; border-radius: 999px; cursor: pointer; transition: width 200ms cubic-bezier(.19,1,.22,1); background: ' + (i === newIdx ? '#003366' : '#A3C6E6') + ';' })),
+
+      office: { highlightTag: t.tomorrow, highlight: t.highlight },
+      goAds: this.go('homemade'),
+      adCats: [TX('Selling', 'Prodajem', 'Verkaufe'), TX('Buying', 'Kupujem', 'Kaufe'), TX('Giving away', 'Poklanjam', 'Verschenke')].map(c => ({ label: L(c) })),
+      adsCount: HOMEMADE.length + ' \u203a',
+      parking: (() => { const free = 3, total = 24, pct = Math.round((total - free) / total * 100), col = free === 0 ? '#9A3B3B' : free <= 5 ? '#3D6E9F' : '#2F7A4A';
+        return { label: free === 0 ? ({ en: 'Full', sr: 'Pun', de: 'Voll' })[lang] : ({ en: free + ' of ' + total + ' free', sr: 'Slobodno ' + free + ' od ' + total, de: free + ' von ' + total + ' frei' })[lang],
+          labelStyle: 'font-size: 12px; font-weight: 700; color: ' + col + '; white-space: nowrap;',
+          barStyle: 'display: block; height: 100%; width: ' + pct + '%; border-radius: 999px; background: ' + col + ';' }; })(),
+      nextFood: (() => { const e = CAL.filter(x => x.type === 'food' && x.date > TODAY_KEY).sort((a, b) => a.date.localeCompare(b.date))[0];
+        if (!e) return { when: '', title: t.foodNone, where: '', onClick: () => {} };
+        const d = new Date(e.date + 'T00:00:00'), t0 = new Date(TODAY_KEY + 'T00:00:00'), n = Math.round((d - t0) / 86400000);
+        const day = n === 1 ? t.tomorrow : WDAYS_LONG[lang][(d.getDay() + 6) % 7] + ', ' + d.getDate() + '.';
+        return { when: day + (e.time ? ' \u00b7 ' + e.time : ''), title: L(e.text), where: e.who ? L(e.who) : '', onClick: () => this.setState({ selDate: e.date, calY: d.getFullYear(), calM: d.getMonth() }) }; })(),
+      officeLinks: OFFICE_LINKS.map(o => ({ title: L(o.title), meta: L(o.meta), cta: L(o.cta), onClick: o.key === 'homemade' ? this.go('homemade') : (o.key === 'jobs' ? this.go('jobs') : this.go('useful')) })),
+
+      usefulTop: [].concat(USEFUL[0].links, USEFUL[1].links, USEFUL[2].links).map(l => ({ title: L(l.title), meta: L(l.meta), onClick: this.go('useful') })),
+      usefulTiles: [USEFUL[0].links[1], USEFUL[1].links[0], USEFUL[1].links[1], USEFUL[2].links[2]].map((l, i) => ({ style: 'display: flex; flex-direction: column; justify-content: space-between; gap: 10px; min-height: 76px; padding: 12px; border-radius: 12px; text-decoration: none; transition: background 200ms cubic-bezier(.19,1,.22,1), transform 200ms cubic-bezier(.19,1,.22,1); color: ' + ['#FFFFFF', '#FFFFFF', '#003366', '#5C4020'][i] + '; background: ' + ['#003366', '#2F6DA8', '#A3C6E6', '#E9D9C2'][i] + ';', title: L(l.title), i0: false, i1: i === 0, i2: i === 1, i3: i === 2, i4: false, i5: i === 3 })),
+      usefulAcc: USEFUL.map((g, i) => {
+        const open = this.state.usefulOpen === i;
+        return {
+          title: L(g.title), count: String(g.links.length), open, isStart: i === 0, isPeople: i === 1, isAdmin: i === 2,
+          links: g.links.map(l => ({ title: L(l.title), meta: L(l.meta) })),
+          onToggle: () => this.setState({ usefulOpen: open ? -1 : i }),
+          wrapStyle: 'display: flex; flex-direction: column; background: ' + (open ? '#FAFCFE' : '#FFFFFF') + ';' + (i > 0 ? ' border-top: 1px solid #E2E5EA;' : ''),
+          headStyle: 'display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 12px; border: 0; background: transparent; cursor: pointer; font-family: inherit; text-align: left;',
+          iconStyle: 'width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; flex: 0 0 auto; color: ' + (open ? '#FFFFFF' : '#003366') + '; background: ' + (open ? '#003366' : '#DCEAF6') + ';',
+          chevStyle: 'width: 16px; text-align: center; font-size: 16px; line-height: 1; color: #80868E; transition: transform 200ms cubic-bezier(.19,1,.22,1); transform: rotate(' + (open ? '90' : '0') + 'deg);'
+        };
+      }),
+      usefulGroups: USEFUL.map(g => ({ title: L(g.title), links: g.links.map(l => ({ title: L(l.title), meta: L(l.meta) })) })),
+
+      recsTop: RECS.slice(0, 3).map(r => ({ tag: L(r.tag), title: L(r.title), meta: L(r.meta) })),
+      recTabs: Object.keys(recLabel).map(k => ({ label: L(recLabel[k]), style: this.pill(st.recTab === k), onClick: () => this.setState({ recTab: k }) })),
+      recsList: RECS.filter(r => st.recTab === 'all' || r.cat === st.recTab).map(r => ({ tag: L(r.tag), title: L(r.title), note: L(r.note), meta: L(r.meta) })),
+
+      homemade: HOMEMADE.map(h => ({ tag: L(h.tag), title: L(h.title), note: L(h.note), seller: h.seller, initials: h.initials, price: h.price, onSeller: this.openPerson(h.sellerId) })),
+
+      jobFilters: ['all', 'dev', 'support', 'design'].map(k => ({ label: L(DEPTS[k]), style: this.pill(st.jobDept === k), onClick: () => this.setState({ jobDept: k }) })),
+      jobsList: JOBS.filter(j => st.jobDept === 'all' || j.dept === st.jobDept).map(j => ({ title: L(j.title), meta: L(j.meta), bonus: L(j.bonus) })),
+
+      person: {
+        initials: person.initials, name: person.name, role: L(person.role), deptLine: L(DEPTS[person.dept]) + ' \u00b7 ' + person.office,
+        facts: [{ label: t.email, value: person.email }, { label: t.phone, value: person.phone }, { label: t.office, value: person.office }, { label: t.since, value: L(person.since) }],
+        skills: L(person.skills).map(s => ({ label: s }))
+      },
+      teamMates: PEOPLE.filter(p => p.dept === person.dept && p.id !== person.id).map(p => ({ initials: p.initials, name: p.name, role: L(p.role), onOpen: this.openPerson(p.id) }))
+    };
+  }
+}
+
+</script>
+</body>
