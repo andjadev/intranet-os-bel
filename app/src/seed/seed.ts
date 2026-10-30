@@ -21,7 +21,7 @@ const ACCOUNTS = [
 // Children before parents, so nothing is left pointing at a deleted document.
 const ALL_COLLECTIONS: CollectionSlug[] = [
   'chat-messages', 'poll-votes', 'polls', 'rec-comments', 'rec-posts', 'rec-categories',
-  'albums', 'jobs', 'classifieds', 'links', 'events', 'users', 'departments', 'media',
+  'albums', 'jobs', 'classifieds', 'links', 'link-categories', 'events', 'users', 'departments', 'media',
 ]
 
 const SITE_SETTINGS_EMPTY = {

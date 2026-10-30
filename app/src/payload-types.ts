@@ -70,6 +70,7 @@ export interface Config {
     events: Event;
     users: User;
     links: Link;
+    'link-categories': LinkCategory;
     classifieds: Classified;
     jobs: Job;
     'rec-posts': RecPost;
@@ -91,6 +92,7 @@ export interface Config {
     events: EventsSelect<false> | EventsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     links: LinksSelect<false> | LinksSelect<true>;
+    'link-categories': LinkCategoriesSelect<false> | LinkCategoriesSelect<true>;
     classifieds: ClassifiedsSelect<false> | ClassifiedsSelect<true>;
     jobs: JobsSelect<false> | JobsSelect<true>;
     'rec-posts': RecPostsSelect<false> | RecPostsSelect<true>;
@@ -253,10 +255,24 @@ export interface Link {
   title: string;
   description?: string | null;
   url: string;
-  group: 'start' | 'people' | 'admin';
+  /**
+   * New category: the + button next to the field, or Info categories in the menu.
+   */
+  category: number | LinkCategory;
   order?: number | null;
   tile?: ('navy' | 'mid' | 'sky' | 'sand') | null;
   icon?: ('vpn' | 'health' | 'vacation' | 'alert' | 'card' | 'doc') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "link-categories".
+ */
+export interface LinkCategory {
+  id: number;
+  title: string;
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -455,6 +471,10 @@ export interface PayloadLockedDocument {
         value: number | Link;
       } | null)
     | ({
+        relationTo: 'link-categories';
+        value: number | LinkCategory;
+      } | null)
+    | ({
         relationTo: 'classifieds';
         value: number | Classified;
       } | null)
@@ -595,10 +615,20 @@ export interface LinksSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   url?: T;
-  group?: T;
+  category?: T;
   order?: T;
   tile?: T;
   icon?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "link-categories_select".
+ */
+export interface LinkCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }

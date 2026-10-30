@@ -1,14 +1,15 @@
 import Link from 'next/link'
 
-import { LINK_GROUP_LABELS } from '@/i18n/dict'
-import { LINK_GROUPS } from '@/lib/constants'
 import { getDict, getLang, getPayloadClient } from '@/lib/server'
 
 export default async function LinksPage() {
   const lang = await getLang()
   const t = await getDict()
   const payload = await getPayloadClient()
-  const links = await payload.find({ collection: 'links', locale: lang, sort: 'order', pagination: false, depth: 0, overrideAccess: true })
+  const [categories, links] = await Promise.all([
+    payload.find({ collection: 'link-categories', locale: lang, sort: 'order', pagination: false, depth: 0, overrideAccess: true }),
+    payload.find({ collection: 'links', locale: lang, sort: 'order', pagination: false, depth: 0, overrideAccess: true }),
+  ])
 
   return (
     <div>
@@ -20,12 +21,12 @@ export default async function LinksPage() {
         <p className="page-sub">{t.usefulPageSub}</p>
       </header>
       <div className="grid-3">
-        {LINK_GROUPS.map((g) => {
-          const items = links.docs.filter((l) => l.group === g)
+        {categories.docs.map((c) => {
+          const items = links.docs.filter((l) => l.category === c.id)
           if (items.length === 0) return null
           return (
-            <section key={g} className="card link-group">
-              <h2>{LINK_GROUP_LABELS[g][lang]}</h2>
+            <section key={c.id} className="card link-group">
+              <h2>{c.title}</h2>
               {items.map((l) => (
                 <a
                   key={l.id}

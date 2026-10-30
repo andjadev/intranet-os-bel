@@ -9,7 +9,7 @@ export const Links: CollectionConfig = {
     singular: { sr: 'Link', en: 'Link', de: 'Link' },
     plural: { sr: 'Korisne informacije', en: 'Useful information', de: 'Nützliche Infos' },
   },
-  admin: { hidden: hiddenForEditors, useAsTitle: 'title', defaultColumns: ['title', 'group', 'tile', 'order'] },
+  admin: { hidden: hiddenForEditors, useAsTitle: 'title', defaultColumns: ['title', 'category', 'tile', 'order'] },
   defaultSort: 'order',
   access: { read: loggedIn, create: superadmins, update: superadmins, delete: superadmins },
   fields: [
@@ -20,15 +20,18 @@ export const Links: CollectionConfig = {
       type: 'row',
       fields: [
         {
-          name: 'group',
-          type: 'select',
+          name: 'category',
+          type: 'relationship',
+          relationTo: 'link-categories',
           required: true,
-          label: { sr: 'Grupa', en: 'Group', de: 'Gruppe' },
-          options: [
-            { label: { sr: 'Prvi koraci', en: 'Getting started', de: 'Erste Schritte' }, value: 'start' },
-            { label: { sr: 'Zaposleni i beneficije', en: 'People & benefits', de: 'Personal & Benefits' }, value: 'people' },
-            { label: { sr: 'Svakodnevna administracija', en: 'Everyday admin', de: 'Alltag & Verwaltung' }, value: 'admin' },
-          ],
+          label: { sr: 'Kategorija', en: 'Category', de: 'Kategorie' },
+          admin: {
+            description: {
+              sr: 'Nova kategorija: dugme + pored polja ili Kategorije informacija u meniju.',
+              en: 'New category: the + button next to the field, or Info categories in the menu.',
+              de: 'Neue Kategorie: Schaltfläche + neben dem Feld oder Info-Kategorien im Menü.',
+            },
+          },
         },
         { name: 'order', type: 'number', defaultValue: 0, label: { sr: 'Redosled', en: 'Order', de: 'Reihenfolge' } },
       ],

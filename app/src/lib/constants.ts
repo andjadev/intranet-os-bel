@@ -28,8 +28,6 @@ export const TILE_STYLES = {
 } as const
 export type TileStyle = keyof typeof TILE_STYLES
 
-export const LINK_GROUPS = ['start', 'people', 'admin'] as const
-
 export const ALBUM_THEMES = {
   blue: { fg: 'var(--navy)', bg: ['var(--blue-5)', 'var(--blue-3)', 'var(--blue-8)'] },
   sand: { fg: 'var(--heading)', bg: ['var(--blue-4)', 'var(--blue-2)', 'var(--blue-6)'] },

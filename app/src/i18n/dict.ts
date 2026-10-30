@@ -362,12 +362,6 @@ export const TYPE_LABELS: Record<EventType, Record<Lang, string>> = {
   food: { en: 'Food', sr: 'Hrana', de: 'Essen' },
   holiday: { en: 'Holiday', sr: 'Praznik', de: 'Feiertag' },
 }
-export const LINK_GROUP_LABELS: Record<string, Record<Lang, string>> = {
-  start: { en: 'Getting started', sr: 'Prvi koraci', de: 'Erste Schritte' },
-  people: { en: 'People & benefits', sr: 'Zaposleni i beneficije', de: 'Personal & Benefits' },
-  admin: { en: 'Everyday admin', sr: 'Svakodnevna administracija', de: 'Alltag & Verwaltung' },
-}
-
 /** "Sreda, 7. oktobar" / "Wednesday, 7 October" for a YYYY-MM-DD key. */
 export function longDayLabel(key: string, lang: Lang): string {
   const d = new Date(key + 'T00:00:00')

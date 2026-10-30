@@ -15,6 +15,7 @@ import { Classifieds } from './collections/Classifieds'
 import { Departments } from './collections/Departments'
 import { Events } from './collections/Events'
 import { Jobs } from './collections/Jobs'
+import { LinkCategories } from './collections/LinkCategories'
 import { Links } from './collections/Links'
 import { Media } from './collections/Media'
 import { PollVotes, Polls, RecCategories, RecComments, RecPosts } from './collections/Recommendations'
@@ -69,6 +70,7 @@ export default buildConfig({
     Events,
     Users,
     Links,
+    LinkCategories,
     Classifieds,
     Jobs,
     RecPosts,
