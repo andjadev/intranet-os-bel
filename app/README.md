@@ -126,7 +126,10 @@ S3 skladište iz jednog besplatnog Supabase projekta. Podešavanje builda je u `
    - *Connect* → **Transaction pooler** URL (port 6543) → `DATABASE_URL`.
    - *Storage* → novi **privatni** bucket `media` → `S3_BUCKET=media`.
    - *Storage → S3 Connection*: `S3_ENDPOINT`, `S3_REGION`, pa *New access key* → `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`.
-2. **Netlify**: *Add new project → Import from Git* (GitLab repo). Base directory i build komanda se čitaju iz `netlify.toml`.
+2. **Netlify**: sajt je povezan sa privatnim GitHub repozitorijumom (Netlify besplatno ne radi sa
+   našim GitLab serverom). Svaki `git push github master` automatski gradi i objavljuje sajt.
+   Base directory i build komanda se čitaju iz `netlify.toml`. Lokalni build na Windows-u ne radi
+   bez Developer Mode-a (simbolički linkovi), zato se gradi samo na Netlify-ju.
 3. **Environment variables** u Netlify-ju: `DATABASE_URL`, `PAYLOAD_SECRET`, `AUTH_SECRET`,
    `APP_URL=https://<sajt>.netlify.app`, `SUPERADMIN_EMAILS`, `ENABLE_DEV_LOGIN=false`, `S3_*`
    (`ENTRA_*` kasnije, kad IT napravi app registration i doda redirect URI `https://<sajt>.netlify.app/auth/callback`).

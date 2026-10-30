@@ -1,5 +1,5 @@
-# Netlify: the Next.js app lives in app/. Netlify detects Next.js and adds its adapter automatically.
-# Environment variables (DATABASE_URL, secrets, S3_*) are set in the Netlify UI, see app/README.md.
+# Netlify: the Next.js app lives in app/. Netlify builds on every push to the connected GitHub repo.
+# Environment variables (DATABASE_URL, secrets, S3_*) are set in Netlify, see app/README.md.
 
 [build]
   base = "app"
@@ -9,3 +9,7 @@
 [build.environment]
   NODE_VERSION = "22.23.4"
   NEXT_TELEMETRY_DISABLED = "1"
+
+# Next.js adapter (server routes, middleware, images), pinned in app/package.json.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
