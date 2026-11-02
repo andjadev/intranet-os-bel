@@ -68,7 +68,7 @@ naslov početne i Teams link u Podešavanjima portala su mu samo za čitanje.
 |---|---|---|
 | Kratak pogled (kalendar), sledeća hrana | **Kalendar** (tip „Hrana u kancelariji" puni „Sledeća hrana"). Rođendani i slave dolaze automatski iz profila kolega (polja „Rođendan" i „Slava"), za tekuću i narednih 5 godina. | superadmin |
 | Kolege, profil, Nove kolege | **Kolege** (štiklirati „Prikaži u Nove kolege"), **Timovi** | superadmin |
-| Korisne informacije (4 pločice + stranica) | **Korisne informacije** (polje „Pločica na početnoj"); kategorije sa ikonicom: traka iznad liste ili **Kategorije informacija** | superadmin |
+| Korisne informacije (4 pločice + stranica) | **Korisne informacije** (polje „Pločica na početnoj"); kategorije sa ikonicom: traka iznad liste ili **Kategorije informacija**. Informacija vodi na link ili na otpremljen fajl (PDF, Word, Excel; čuva se u **Dokumenti**, vide ga samo prijavljeni; na Netlify-ju najviše ~5 MB po fajlu) | superadmin |
 | Poslovi | **Otvorene pozicije** | superadmin |
 | Naslov početne, Teams link | **Podešavanja portala** | superadmin |
 | Mali oglasi | **Mali oglasi** (zaposleni dodaju i sami) | editor |

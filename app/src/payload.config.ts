@@ -13,6 +13,7 @@ import { Albums } from './collections/Albums'
 import { ChatMessages } from './collections/ChatMessages'
 import { Classifieds } from './collections/Classifieds'
 import { Departments } from './collections/Departments'
+import { Documents } from './collections/Documents'
 import { Events } from './collections/Events'
 import { Jobs } from './collections/Jobs'
 import { LinkCategories } from './collections/LinkCategories'
@@ -86,6 +87,7 @@ export default buildConfig({
     ChatMessages,
     Departments,
     Media,
+    Documents,
   ],
   globals: [SiteSettings],
   secret: process.env.PAYLOAD_SECRET || '',
@@ -107,7 +109,7 @@ export default buildConfig({
     // Always registered (enabled or not) so the admin import map keeps its upload component in every environment.
     s3Storage({
       enabled: Boolean(s3Bucket),
-      collections: { media: true },
+      collections: { media: true, documents: { prefix: 'documents' } },
       bucket: s3Bucket || '',
       config: {
         endpoint: process.env.S3_ENDPOINT,

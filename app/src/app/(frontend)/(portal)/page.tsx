@@ -11,7 +11,7 @@ import { NewcomerCarousel } from '@/components/home/NewcomerCarousel'
 import { NextFood } from '@/components/home/NextFood'
 import { longDayLabel, shortDateLabel, WDAYS_LONG } from '@/i18n/dict'
 import { themeColor, TILE_STYLES, type TileStyle } from '@/lib/constants'
-import { loadActivePoll, loadCalendar, loadDirectory, loadRecCategories, loadSettings, mediaUrl } from '@/lib/data'
+import { linkHref, loadActivePoll, loadCalendar, loadDirectory, loadRecCategories, loadSettings, mediaUrl, opensNewTab } from '@/lib/data'
 import { daysBetween, todayKey } from '@/lib/dates'
 import { getDict, getLang, getPayloadClient, requireUser } from '@/lib/server'
 
@@ -34,7 +34,7 @@ export default async function HomePage() {
       limit: 10,
       overrideAccess: true,
     }),
-    payload.find({ collection: 'links', locale: lang, where: { tile: { exists: true } }, sort: 'order', limit: 4, depth: 0, overrideAccess: true }),
+    payload.find({ collection: 'links', locale: lang, where: { tile: { exists: true } }, sort: 'order', limit: 4, depth: 1, overrideAccess: true }),
     payload.find({ collection: 'link-categories', locale: lang, sort: 'order', pagination: false, depth: 0, overrideAccess: true }),
     payload.find({ collection: 'links', pagination: false, depth: 0, overrideAccess: true, select: { category: true } }),
     payload.count({ collection: 'classifieds', overrideAccess: true }),
@@ -120,14 +120,14 @@ export default async function HomePage() {
               <div className="tiles">
                 {tiles.docs.map((l) => {
                   const s = TILE_STYLES[(l.tile as TileStyle) || 'navy']
-                  const external = /^https?:/.test(l.url)
+                  const href = linkHref(l)
                   return (
                     <a
                       key={l.id}
-                      href={l.url}
+                      href={href}
                       className="tile"
                       style={{ background: s.bg, color: s.fg }}
-                      {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                      {...(opensNewTab(href) ? { target: '_blank', rel: 'noreferrer' } : {})}
                     >
                       <span className="tile-ico">
                         <Icon name={l.icon || 'doc'} size={16} stroke={1.5} />

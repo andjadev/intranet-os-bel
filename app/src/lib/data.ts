@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { TYPE_LABELS } from '../i18n/dict'
-import type { Media, RecCategory, User } from '../payload-types'
+import type { Document, Media, RecCategory, User } from '../payload-types'
 import type { EventType, Lang } from './constants'
 import { addDays, dateKeyOf } from './dates'
 import { getPayloadClient } from './server'
@@ -25,6 +25,13 @@ export function mediaUrl(m: unknown, size: 'thumb' | null = null): string | null
   const media = m as Media
   return (size && media.sizes?.[size]?.url) || media.url || null
 }
+
+/** Where a useful-info entry points: its uploaded file (needs depth >= 1), else its link. */
+export function linkHref(l: { url?: string | null; file?: number | Document | null }): string {
+  return (typeof l.file === 'object' && l.file?.url) || l.url || '#'
+}
+/** Files and outside links open in a new tab. */
+export const opensNewTab = (href: string) => /^https?:/.test(href) || href.startsWith('/api/')
 
 export const personLite = (u: User): PersonLite => ({
   id: u.id,

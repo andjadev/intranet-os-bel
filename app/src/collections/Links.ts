@@ -20,7 +20,25 @@ export const Links: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true, localized: true, label: { sr: 'Naslov', en: 'Title', de: 'Titel' } },
     { name: 'description', type: 'text', localized: true, label: { sr: 'Opis', en: 'Description', de: 'Beschreibung' } },
-    { name: 'url', type: 'text', required: true, label: 'URL', defaultValue: '#' },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'file',
+          type: 'upload',
+          relationTo: 'documents',
+          label: { sr: 'Fajl (PDF, Word, Excel…)', en: 'File (PDF, Word, Excel…)', de: 'Datei (PDF, Word, Excel…)' },
+        },
+        {
+          name: 'url',
+          type: 'text',
+          label: { sr: 'ili link', en: 'or link', de: 'oder Link' },
+          admin: { placeholder: 'https://…' },
+          validate: (value: string | null | undefined, { siblingData }: { siblingData: { file?: unknown } }) =>
+            Boolean(value?.trim() || siblingData?.file) || 'Dodajte fajl ili upišite link.',
+        },
+      ],
+    },
     {
       type: 'row',
       fields: [
