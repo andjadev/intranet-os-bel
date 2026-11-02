@@ -12,6 +12,6 @@ export const Departments: CollectionConfig = {
   access: { read: loggedIn, create: superadmins, update: superadmins, delete: superadmins },
   fields: [
     { name: 'name', type: 'text', required: true, localized: true, label: { sr: 'Naziv', en: 'Name', de: 'Name' } },
-    { name: 'slug', type: 'text', required: true, unique: true, label: { sr: 'Oznaka u adresi', en: 'URL name', de: 'URL-Name' } },
+    { name: 'slug', type: 'text', required: true, unique: true, label: { sr: 'Oznaka', en: 'Short name', de: 'Kürzel' } },
   ],
 }

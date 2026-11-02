@@ -31,7 +31,7 @@ export const RecCategories: CollectionConfig = {
           type: 'text',
           required: true,
           unique: true,
-          label: { sr: 'Oznaka u adresi', en: 'URL name', de: 'URL-Name' },
+          label: { sr: 'Oznaka', en: 'Short name', de: 'Kürzel' },
           admin: {
             description: {
               sr: 'Mala slova, bez razmaka i kvačica, npr. kultura → /preporuke/kultura. Ne menjati kad je u upotrebi.',
@@ -60,7 +60,7 @@ export const RecCategories: CollectionConfig = {
           type: 'row',
           fields: [
             { name: 'label', type: 'text', required: true, localized: true, label: { sr: 'Naziv', en: 'Name', de: 'Name' } },
-            { name: 'slug', type: 'text', required: true, label: { sr: 'Oznaka u adresi', en: 'URL name', de: 'URL-Name' } },
+            { name: 'slug', type: 'text', required: true, label: { sr: 'Oznaka', en: 'Short name', de: 'Kürzel' } },
             {
               name: 'icon',
               type: 'select',
@@ -92,7 +92,7 @@ export const RecPosts: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'category', type: 'relationship', relationTo: 'rec-categories', required: true, label: { sr: 'Kategorija', en: 'Category', de: 'Kategorie' } },
-        { name: 'sub', type: 'text', label: { sr: 'Podkategorija (oznaka u adresi)', en: 'Sub-category (URL name)', de: 'Unterkategorie (URL-Name)' } },
+        { name: 'sub', type: 'text', label: { sr: 'Podkategorija (oznaka)', en: 'Sub-category (short name)', de: 'Unterkategorie (Kürzel)' } },
       ],
     },
     { name: 'title', type: 'text', required: true, label: { sr: 'Naslov', en: 'Title', de: 'Titel' } },
