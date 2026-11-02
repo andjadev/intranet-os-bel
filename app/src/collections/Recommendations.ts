@@ -26,7 +26,20 @@ export const RecCategories: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'label', type: 'text', required: true, localized: true, label: { sr: 'Naziv', en: 'Name', de: 'Name' } },
-        { name: 'slug', type: 'text', required: true, unique: true, admin: { description: 'npr. kultura' } },
+        {
+          name: 'slug',
+          type: 'text',
+          required: true,
+          unique: true,
+          label: { sr: 'Oznaka u adresi', en: 'URL name', de: 'URL-Name' },
+          admin: {
+            description: {
+              sr: 'Mala slova, bez razmaka i kvačica, npr. kultura → /preporuke/kultura. Ne menjati kad je u upotrebi.',
+              en: 'Lowercase, no spaces, e.g. culture → /preporuke/culture. Do not change once in use.',
+              de: 'Kleinbuchstaben, ohne Leerzeichen, z. B. kultur → /preporuke/kultur. Nach Verwendung nicht ändern.',
+            },
+          },
+        },
         { name: 'order', type: 'number', defaultValue: 0, label: { sr: 'Redosled', en: 'Order', de: 'Reihenfolge' } },
       ],
     },
@@ -47,7 +60,7 @@ export const RecCategories: CollectionConfig = {
           type: 'row',
           fields: [
             { name: 'label', type: 'text', required: true, localized: true, label: { sr: 'Naziv', en: 'Name', de: 'Name' } },
-            { name: 'slug', type: 'text', required: true },
+            { name: 'slug', type: 'text', required: true, label: { sr: 'Oznaka u adresi', en: 'URL name', de: 'URL-Name' } },
             {
               name: 'icon',
               type: 'select',
@@ -79,7 +92,7 @@ export const RecPosts: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'category', type: 'relationship', relationTo: 'rec-categories', required: true, label: { sr: 'Kategorija', en: 'Category', de: 'Kategorie' } },
-        { name: 'sub', type: 'text', label: { sr: 'Podkategorija (slug)', en: 'Sub-category (slug)', de: 'Unterkategorie (Slug)' } },
+        { name: 'sub', type: 'text', label: { sr: 'Podkategorija (oznaka u adresi)', en: 'Sub-category (URL name)', de: 'Unterkategorie (URL-Name)' } },
       ],
     },
     { name: 'title', type: 'text', required: true, label: { sr: 'Naslov', en: 'Title', de: 'Titel' } },
