@@ -79,7 +79,7 @@ naslov početne i Teams link u Podešavanjima portala su mu samo za čitanje.
 
 Lokalizovana polja (SR/EN/DE) se prevode biranjem jezika gore desno u adminu.
 
-## Microsoft (Entra ID) prijava – šta tražiti od IT-a
+## Microsoft (Entra ID) prijava - šta tražiti od IT-a
 
 1. **App registration** u Entra ID (single tenant).
 2. **Redirect URI** (Web): `https://<intranet-domen>/auth/callback`

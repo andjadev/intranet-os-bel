@@ -46,6 +46,7 @@ export default buildConfig({
     // Matches the portal, which has no dark mode.
     theme: 'light',
     components: {
+      providers: ['/components/admin/AdminProvider#AdminProvider'],
       beforeNavLinks: ['/components/admin/BackToIntranet#BackToIntranetNav'],
       actions: ['/components/admin/BackToIntranet#BackToIntranetAction'],
       graphics: {

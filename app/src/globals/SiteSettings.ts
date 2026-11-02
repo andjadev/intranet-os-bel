@@ -51,15 +51,15 @@ export const SiteSettings: GlobalConfig = {
             {
               type: 'row',
               fields: [
-                { name: 'handymanName', type: 'text', defaultValue: 'Majstor Žile', label: { sr: 'Majstor – ime', en: 'Handyman – name', de: 'Handwerker – Name' } },
-                { name: 'handymanPhone', type: 'text', label: { sr: 'Majstor – telefon', en: 'Handyman – phone', de: 'Handwerker – Telefon' } },
+                { name: 'handymanName', type: 'text', defaultValue: 'Majstor Žile', label: { sr: 'Majstor - ime', en: 'Handyman - name', de: 'Handwerker - Name' } },
+                { name: 'handymanPhone', type: 'text', label: { sr: 'Majstor - telefon', en: 'Handyman - phone', de: 'Handwerker - Telefon' } },
               ],
             },
             {
               name: 'handymanDescription',
               type: 'text',
               localized: true,
-              label: { sr: 'Majstor – opis', en: 'Handyman – description', de: 'Handwerker – Beschreibung' },
+              label: { sr: 'Majstor - opis', en: 'Handyman - description', de: 'Handwerker - Beschreibung' },
             },
           ],
         },

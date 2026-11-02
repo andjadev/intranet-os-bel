@@ -36,7 +36,7 @@ export async function requireUser(): Promise<User> {
 
 export const isEditor = (u: Pick<User, 'role'> | null | undefined) => u?.role === 'superadmin' || u?.role === 'editor'
 
-/** "Ivan J." – short display name used in chat and comments. */
+/** "Ivan J." - short display name used in chat and comments. */
 export const shortName = (name?: string | null) => {
   if (!name) return ''
   const [first, last] = name.split(/\s+/)

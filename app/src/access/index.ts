@@ -1,10 +1,10 @@
 import type { Access, FieldAccess, PayloadRequest } from 'payload'
 
 /**
- * superadmin – everything, including roles and the upper half of the home page
+ * superadmin - everything, including roles and the upper half of the home page
  *              (calendar, colleagues, useful info, jobs, portal settings).
- * editor     – the lower half: recommendations & polls, classifieds, gallery, chat, office notes.
- * employee   – reads the portal and adds their own posts, comments, ads, votes and chat messages.
+ * editor     - the lower half: recommendations & polls, classifieds, gallery, chat, office notes.
+ * employee   - reads the portal and adds their own posts, comments, ads, votes and chat messages.
  */
 export type Role = 'superadmin' | 'editor' | 'employee'
 

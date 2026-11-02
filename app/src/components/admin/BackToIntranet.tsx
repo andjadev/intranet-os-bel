@@ -20,7 +20,7 @@ export function BackToIntranetNav(props: Props) {
   )
 }
 
-/** Header, next to the account button – visible even when the navigation is collapsed. */
+/** Header, next to the account button - visible even when the navigation is collapsed. */
 export function BackToIntranetAction(props: Props) {
   return (
     <a className="osbel-home-action" href="/">

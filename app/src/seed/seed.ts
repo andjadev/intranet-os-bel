@@ -56,7 +56,7 @@ async function main() {
   for (const account of ACCOUNTS) {
     const existing = await payload.count({ collection: 'users', where: { email: { equals: account.email } }, overrideAccess: true })
     if (existing.totalDocs > 0) {
-      payload.logger.info(`${account.email} already exists – unchanged.`)
+      payload.logger.info(`${account.email} already exists - unchanged.`)
       continue
     }
     const password = tempPassword()

@@ -154,3 +154,20 @@ button:focus-visible {
     &:hover { color: #ffffff; filter: brightness(1.06); }
   }
 }
+
+// Fields side by side in a row get equal widths, so the columns line up from row to row.
+// !important: Payload puts an inline "flex: 1 1 auto" on fields without admin.width.
+.field-type.row .row__fields > * {
+  flex: 1 1 0 !important;
+  min-width: 0;
+}
+
+// Decorative background for superadmins (AdminProvider sets the attribute).
+html[data-osbel-bg] {
+  --theme-bg: #efe4d3;
+  background: #efe4d3 url('/backgrounds/pozadina.webp') center / cover fixed;
+}
+html[data-osbel-bg] .template-default,
+html[data-osbel-bg] .template-default__wrap {
+  background: transparent;
+}
