@@ -93,3 +93,64 @@ button:focus-visible {
     filter: brightness(1.06);
   }
 }
+
+// "Korisne informacije" list: categories bar (components/admin/LinkCategoriesBar.tsx).
+.osbel-cats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  background: var(--theme-elevation-0);
+
+  &__title {
+    margin-right: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--theme-elevation-500);
+  }
+
+  &__empty { font-size: 13px; color: var(--theme-elevation-500); }
+
+  &__chip,
+  &__add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  &__chip {
+    border: 1px solid var(--theme-elevation-150);
+    color: var(--theme-elevation-800);
+
+    &:hover { border-color: #009fe3; color: #007cf0; }
+  }
+
+  &__count {
+    min-width: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--theme-elevation-100);
+    font-size: 11px;
+    text-align: center;
+    color: var(--theme-elevation-600);
+  }
+
+  &__add {
+    background: linear-gradient(90deg, #009fe3, #007cf0);
+    color: #ffffff;
+
+    &:hover { color: #ffffff; filter: brightness(1.06); }
+  }
+}

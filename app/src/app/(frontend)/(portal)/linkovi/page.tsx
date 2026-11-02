@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { Icon } from '@/components/Icon'
 import { getDict, getLang, getPayloadClient } from '@/lib/server'
 
 export default async function LinksPage() {
@@ -25,8 +26,11 @@ export default async function LinksPage() {
           const items = links.docs.filter((l) => l.category === c.id)
           if (items.length === 0) return null
           return (
-            <section key={c.id} className="card link-group">
-              <h2>{c.title}</h2>
+            <section key={c.id} id={`kategorija-${c.id}`} className="card link-group">
+              <h2>
+                <Icon name={c.icon || 'folder'} size={14} />
+                {c.title}
+              </h2>
               {items.map((l) => (
                 <a
                   key={l.id}
@@ -34,6 +38,9 @@ export default async function LinksPage() {
                   className="link-item"
                   {...(/^https?:/.test(l.url) ? { target: '_blank', rel: 'noreferrer' } : {})}
                 >
+                  <span className="link-item-ico">
+                    <Icon name={l.icon || 'doc'} size={15} />
+                  </span>
                   <span>
                     <strong>{l.title}</strong>
                     {l.description && <small>{l.description}</small>}

@@ -205,6 +205,23 @@ export const Users: CollectionConfig = {
       ],
     },
     {
+      type: 'row',
+      fields: [
+        {
+          name: 'slavaName',
+          type: 'text',
+          label: { sr: 'Slava', en: 'Slava (patron saint)', de: 'Slava (Familienpatron)' },
+          admin: { placeholder: 'npr. Sveti Nikola' },
+        },
+        {
+          name: 'slavaDate',
+          type: 'date',
+          label: { sr: 'Datum slave (prikazuje se u kalendaru)', en: 'Slava date (shown in calendar)', de: 'Slava-Datum' },
+          admin: { date: { pickerAppearance: 'dayOnly', displayFormat: 'dd.MM.' } },
+        },
+      ],
+    },
+    {
       name: 'skills',
       type: 'text',
       hasMany: true,

@@ -22,7 +22,7 @@ export default async function HomePage() {
   const payload = await getPayloadClient()
   const today = todayKey()
 
-  const [settings, events, directory, newcomers, tiles, adsCount, albums, cats, poll, chat] = await Promise.all([
+  const [settings, events, directory, newcomers, tiles, linkCats, linkCatIds, adsCount, albums, cats, poll, chat] = await Promise.all([
     loadSettings(lang),
     loadCalendar(lang, today),
     loadDirectory(lang),
@@ -35,12 +35,18 @@ export default async function HomePage() {
       overrideAccess: true,
     }),
     payload.find({ collection: 'links', locale: lang, where: { tile: { exists: true } }, sort: 'order', limit: 4, depth: 0, overrideAccess: true }),
+    payload.find({ collection: 'link-categories', locale: lang, sort: 'order', pagination: false, depth: 0, overrideAccess: true }),
+    payload.find({ collection: 'links', pagination: false, depth: 0, overrideAccess: true, select: { category: true } }),
     payload.count({ collection: 'classifieds', overrideAccess: true }),
     payload.find({ collection: 'albums', locale: lang, sort: 'order', limit: 50, depth: 0, overrideAccess: true, select: { name: true } }),
     loadRecCategories(lang),
     loadActivePoll(lang, user.id),
     getChat(),
   ])
+
+  // Category shortcuts under the tiles; empty categories are not shown on /linkovi either.
+  const usedCats = new Set(linkCatIds.docs.map((l) => l.category))
+  const usefulCats = linkCats.docs.filter((c) => usedCats.has(c.id))
 
   // Next food in the office: first `food` event after today (README section 5).
   const food = events.filter((e) => e.type === 'food' && e.date > today).sort((a, b) => a.date.localeCompare(b.date))[0]
@@ -131,6 +137,16 @@ export default async function HomePage() {
                   )
                 })}
               </div>
+              {usefulCats.length > 0 && (
+                <div className="useful-cats">
+                  {usefulCats.map((c) => (
+                    <Link key={c.id} href={`/linkovi#kategorija-${c.id}`} className="useful-cat">
+                      <Icon name={c.icon || 'folder'} size={13} />
+                      {c.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </section>
           </div>
         </div>

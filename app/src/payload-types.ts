@@ -191,6 +191,8 @@ export interface User {
   phone?: string | null;
   startDate?: string | null;
   birthday?: string | null;
+  slavaName?: string | null;
+  slavaDate?: string | null;
   skills?: string[] | null;
   isNewcomer?: boolean | null;
   newcomerNote?: string | null;
@@ -261,7 +263,22 @@ export interface Link {
   category: number | LinkCategory;
   order?: number | null;
   tile?: ('navy' | 'mid' | 'sky' | 'sand') | null;
-  icon?: ('vpn' | 'health' | 'vacation' | 'alert' | 'card' | 'doc') | null;
+  icon?:
+    | (
+        | 'vpn'
+        | 'health'
+        | 'vacation'
+        | 'alert'
+        | 'card'
+        | 'doc'
+        | 'info'
+        | 'folder'
+        | 'home'
+        | 'chat'
+        | 'wrench'
+        | 'star'
+      )
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -272,6 +289,22 @@ export interface Link {
 export interface LinkCategory {
   id: number;
   title: string;
+  icon?:
+    | (
+        | 'vpn'
+        | 'health'
+        | 'vacation'
+        | 'alert'
+        | 'card'
+        | 'doc'
+        | 'info'
+        | 'folder'
+        | 'home'
+        | 'chat'
+        | 'wrench'
+        | 'star'
+      )
+    | null;
   order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -330,7 +363,7 @@ export interface RecCategory {
   id: number;
   label: string;
   /**
-   * npr. kultura
+   * Lowercase, no spaces, e.g. culture → /preporuke/culture. Do not change once in use.
    */
   slug: string;
   order?: number | null;
@@ -594,6 +627,8 @@ export interface UsersSelect<T extends boolean = true> {
   phone?: T;
   startDate?: T;
   birthday?: T;
+  slavaName?: T;
+  slavaDate?: T;
   skills?: T;
   isNewcomer?: T;
   newcomerNote?: T;
@@ -628,6 +663,7 @@ export interface LinksSelect<T extends boolean = true> {
  */
 export interface LinkCategoriesSelect<T extends boolean = true> {
   title?: T;
+  icon?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;

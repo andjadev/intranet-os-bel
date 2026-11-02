@@ -34,11 +34,15 @@ export const personLite = (u: User): PersonLite => ({
   avatar: mediaUrl(u.avatar, 'thumb'),
 })
 
-/** Calendar entries around today, plus yearly birthdays from colleague profiles. */
+/** Years ahead the calendar can be browsed; birthdays and slavas repeat in each of them. */
+const CALENDAR_YEARS_AHEAD = 5
+
+/** Calendar entries around today, plus yearly birthdays and slavas from colleague profiles. */
 export async function loadCalendar(lang: Lang, today: string): Promise<CalEvent[]> {
   const payload = await getPayloadClient()
+  const year = Number(today.slice(0, 4))
   const from = addDays(today, -120)
-  const to = addDays(today, 400)
+  const to = `${year + CALENDAR_YEARS_AHEAD}-12-31`
   const [events, people] = await Promise.all([
     payload.find({
       collection: 'events',
@@ -50,11 +54,13 @@ export async function loadCalendar(lang: Lang, today: string): Promise<CalEvent[
     }),
     payload.find({
       collection: 'users',
-      where: { and: [{ birthday: { exists: true } }, { active: { not_equals: false } }] },
+      where: {
+        and: [{ or: [{ birthday: { exists: true } }, { slavaDate: { exists: true } }] }, { active: { not_equals: false } }],
+      },
       pagination: false,
       depth: 0,
       overrideAccess: true,
-      select: { name: true, birthday: true },
+      select: { name: true, birthday: true, slavaName: true, slavaDate: true },
     }),
   ])
 
@@ -66,14 +72,16 @@ export async function loadCalendar(lang: Lang, today: string): Promise<CalEvent[
     who: e.description || '',
   }))
 
-  const year = Number(today.slice(0, 4))
-  for (const p of people.docs) {
-    if (!p.birthday) continue
-    const md = dateKeyOf(p.birthday).slice(5)
-    for (const y of [year - 1, year, year + 1]) {
+  const yearly = (iso: string, type: 'bday' | 'slava', title: string, who: string) => {
+    const md = dateKeyOf(iso).slice(5)
+    for (let y = year - 1; y <= year + CALENDAR_YEARS_AHEAD; y++) {
       const key = `${y}-${md}`
-      if (key >= from && key <= to) out.push({ date: key, type: 'bday', time: '', title: p.name, who: TYPE_LABELS.bday[lang] })
+      if (key >= from && key <= to) out.push({ date: key, type, time: '', title, who })
     }
+  }
+  for (const p of people.docs) {
+    if (p.birthday) yearly(p.birthday, 'bday', p.name, TYPE_LABELS.bday[lang])
+    if (p.slavaDate) yearly(p.slavaDate, 'slava', p.name, [TYPE_LABELS.slava[lang], p.slavaName].filter(Boolean).join(' · '))
   }
   return out
 }

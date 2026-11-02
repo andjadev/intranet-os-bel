@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { hiddenForEditors, loggedIn, superadmins } from '../access'
-import { iconOptions } from '../lib/constants'
+import { INFO_ICONS, iconOptions } from '../lib/constants'
 
 export const Links: CollectionConfig = {
   slug: 'links',
@@ -9,7 +9,12 @@ export const Links: CollectionConfig = {
     singular: { sr: 'Link', en: 'Link', de: 'Link' },
     plural: { sr: 'Korisne informacije', en: 'Useful information', de: 'Nützliche Infos' },
   },
-  admin: { hidden: hiddenForEditors, useAsTitle: 'title', defaultColumns: ['title', 'category', 'tile', 'order'] },
+  admin: {
+    hidden: hiddenForEditors,
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', 'tile', 'order'],
+    components: { beforeListTable: ['/components/admin/LinkCategoriesBar#LinkCategoriesBar'] },
+  },
   defaultSort: 'order',
   access: { read: loggedIn, create: superadmins, update: superadmins, delete: superadmins },
   fields: [
@@ -55,7 +60,7 @@ export const Links: CollectionConfig = {
           type: 'select',
           defaultValue: 'doc',
           label: { sr: 'Ikonica', en: 'Icon', de: 'Symbol' },
-          options: iconOptions(['vpn', 'health', 'vacation', 'alert', 'card', 'doc']),
+          options: iconOptions(INFO_ICONS),
         },
       ],
     },

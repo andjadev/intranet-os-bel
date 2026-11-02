@@ -46,6 +46,12 @@ export const ICONS = {
   alert: 'alert',
   card: 'card',
   doc: 'doc',
+  info: 'info',
+  folder: 'folder',
+  home: 'home',
+  chat: 'chat',
+  wrench: 'wrench',
+  star: 'star',
   // recommendation categories
   culture: 'culture',
   weekend: 'weekend',
@@ -64,7 +70,24 @@ export const ICONS = {
   coffee: 'coffee',
 } as const
 export type IconName = keyof typeof ICONS
-export const iconOptions = (names: IconName[]) => names.map((n) => ({ label: n, value: n }))
+// Readable admin labels for the useful-info icons; the others show their key.
+const ICON_LABELS: Partial<Record<IconName, { sr: string; en: string; de: string }>> = {
+  vpn: { sr: 'Katanac (VPN, lozinke)', en: 'Padlock (VPN, passwords)', de: 'Schloss (VPN, Passwörter)' },
+  health: { sr: 'Srce (zdravlje)', en: 'Heart (health)', de: 'Herz (Gesundheit)' },
+  vacation: { sr: 'Kalendar (odmor)', en: 'Calendar (leave)', de: 'Kalender (Urlaub)' },
+  alert: { sr: 'Upozorenje (prijava problema)', en: 'Warning (report a problem)', de: 'Warnung (Problem melden)' },
+  card: { sr: 'Kartica', en: 'Card', de: 'Karte' },
+  doc: { sr: 'Dokument', en: 'Document', de: 'Dokument' },
+  info: { sr: 'Info', en: 'Info', de: 'Info' },
+  folder: { sr: 'Fascikla', en: 'Folder', de: 'Ordner' },
+  home: { sr: 'Kuća', en: 'House', de: 'Haus' },
+  chat: { sr: 'Poruka', en: 'Message', de: 'Nachricht' },
+  wrench: { sr: 'Alat (IT, podešavanja)', en: 'Wrench (IT, setup)', de: 'Werkzeug (IT, Einrichtung)' },
+  star: { sr: 'Zvezdica', en: 'Star', de: 'Stern' },
+}
+export const iconOptions = (names: IconName[]) => names.map((n) => ({ label: ICON_LABELS[n] ?? n, value: n }))
+/** Icons offered for useful-info links and their categories. */
+export const INFO_ICONS: IconName[] = ['vpn', 'health', 'vacation', 'alert', 'card', 'doc', 'info', 'folder', 'home', 'chat', 'wrench', 'star']
 
 // Category colors are stored as hex in the CMS; the standard palette values are mapped to theme tokens.
 const FG_TOKENS: Record<string, string> = { '#003768': 'var(--navy)', '#000000': 'var(--heading)', '#E8EEF2': 'var(--blue-5)' }

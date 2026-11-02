@@ -1,6 +1,7 @@
 import { APIError, type CollectionConfig } from 'payload'
 
 import { hiddenForEditors, loggedIn, superadmins } from '../access'
+import { INFO_ICONS, iconOptions } from '../lib/constants'
 
 /** Sections of the "Korisne informacije" page; each link belongs to one. */
 export const LinkCategories: CollectionConfig = {
@@ -9,7 +10,7 @@ export const LinkCategories: CollectionConfig = {
     singular: { sr: 'Kategorija informacija', en: 'Info category', de: 'Info-Kategorie' },
     plural: { sr: 'Kategorije informacija', en: 'Info categories', de: 'Info-Kategorien' },
   },
-  admin: { hidden: hiddenForEditors, useAsTitle: 'title', defaultColumns: ['title', 'order'] },
+  admin: { hidden: hiddenForEditors, useAsTitle: 'title', defaultColumns: ['title', 'icon', 'order'] },
   defaultSort: 'order',
   access: { read: loggedIn, create: superadmins, update: superadmins, delete: superadmins },
   hooks: {
@@ -25,6 +26,18 @@ export const LinkCategories: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true, label: { sr: 'Naziv', en: 'Name', de: 'Name' } },
-    { name: 'order', type: 'number', defaultValue: 0, label: { sr: 'Redosled', en: 'Order', de: 'Reihenfolge' } },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'icon',
+          type: 'select',
+          defaultValue: 'folder',
+          label: { sr: 'Ikonica', en: 'Icon', de: 'Symbol' },
+          options: iconOptions(INFO_ICONS),
+        },
+        { name: 'order', type: 'number', defaultValue: 0, label: { sr: 'Redosled', en: 'Order', de: 'Reihenfolge' } },
+      ],
+    },
   ],
 }

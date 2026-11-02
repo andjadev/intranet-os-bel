@@ -41,12 +41,16 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
-    meta: { titleSuffix: ' · OSBEL Intranet admin' },
+    meta: { titleSuffix: ' · OSBEL Intranet admin', icons: [{ rel: 'icon', type: 'image/png', url: '/logos/site-icon.png' }] },
     // Matches the portal, which has no dark mode.
     theme: 'light',
     components: {
       beforeNavLinks: ['/components/admin/BackToIntranet#BackToIntranetNav'],
       actions: ['/components/admin/BackToIntranet#BackToIntranetAction'],
+      graphics: {
+        Icon: '/components/admin/Graphics#AdminIcon',
+        Logo: '/components/admin/Graphics#AdminLogo',
+      },
     },
   },
   routes: { admin: '/admin' },

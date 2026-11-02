@@ -134,7 +134,7 @@ export function CalendarPeek({ events, lang, t }: { events: CalEvent[]; lang: La
               <span key={i} className="day-card" style={{ flex: `1 1 calc(${100 / perRow}% - 8px)` }}>
                 <TypeIcon type={e.type} />
                 <span className="day-card-body">
-                  <span className="day-card-time">{e.time || t.allDay}</span>
+                  <span className="day-card-time">{e.time || '-'}</span>
                   <span className="day-card-title">{e.title}</span>
                   <span className="day-card-who">{e.who || TYPE_LABELS[e.type][lang]}</span>
                 </span>
