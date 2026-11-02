@@ -110,6 +110,9 @@ export default buildConfig({
     // Always registered (enabled or not) so the admin import map keeps its upload component in every environment.
     s3Storage({
       enabled: Boolean(s3Bucket),
+      // The plugin's own columns (prefix, _objectKey) exist with or without a bucket, so migrations
+      // generated locally (no bucket) match the database Netlify uses.
+      alwaysInsertFields: true,
       collections: { media: true, documents: { prefix: 'documents' } },
       bucket: s3Bucket || '',
       config: {
