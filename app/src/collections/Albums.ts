@@ -42,6 +42,13 @@ export const Albums: CollectionConfig = {
       relationTo: 'media',
       hasMany: true,
       label: { sr: 'Fotografije', en: 'Photos', de: 'Fotos' },
+      admin: {
+        description: {
+          sr: '1) Prevucite slike ovde (može više odjednom). 2) U prozoru koji se otvori kliknite Sačuvaj. 3) Na kraju kliknite Sačuvaj gore desno, inače se album ne čuva. Do oko 5 MB po slici.',
+          en: '1) Drop photos here (several at once is fine). 2) Click Save in the panel that opens. 3) Finally click Save at the top right, otherwise the album is not stored. Up to about 5 MB per photo.',
+          de: '1) Fotos hierher ziehen (mehrere möglich). 2) Im Fenster auf Speichern klicken. 3) Zum Schluss oben rechts auf Speichern klicken, sonst wird das Album nicht gespeichert. Bis ca. 5 MB pro Foto.',
+        },
+      },
     },
   ],
 }

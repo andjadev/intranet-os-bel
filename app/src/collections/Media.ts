@@ -8,6 +8,7 @@ export const Media: CollectionConfig = {
     singular: { sr: 'Fajl', en: 'File', de: 'Datei' },
     plural: { sr: 'Fajlovi i slike', en: 'Media', de: 'Medien' },
   },
+  admin: { components: { beforeListTable: ['/components/admin/UploadDropzone#MediaDropzone'] } },
   access: { read: loggedIn, create: editors, update: editors, delete: editors },
   fields: [{ name: 'alt', type: 'text', label: { sr: 'Opis slike', en: 'Alt text', de: 'Alt-Text' } }],
   upload: {

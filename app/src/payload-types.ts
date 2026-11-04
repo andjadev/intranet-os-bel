@@ -474,6 +474,9 @@ export interface Album {
   dateLabel?: string | null;
   theme?: ('blue' | 'sand' | 'green') | null;
   order?: number | null;
+  /**
+   * 1) Drop photos here (several at once is fine). 2) Click Save in the panel that opens. 3) Finally click Save at the top right, otherwise the album is not stored. Up to about 5 MB per photo.
+   */
   photos?: (number | Media)[] | null;
   updatedAt: string;
   createdAt: string;

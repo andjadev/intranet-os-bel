@@ -1,4 +1,6 @@
 import { LinkCategoriesBar as LinkCategoriesBar_4c5ba3d4e8e3f3cc65631779bbba473f } from '../../../components/admin/LinkCategoriesBar'
+import { MediaDropzone as MediaDropzone_845891eca0d55b1d0e1d1a82f764bbe8 } from '../../../components/admin/UploadDropzone'
+import { DocumentsDropzone as DocumentsDropzone_845891eca0d55b1d0e1d1a82f764bbe8 } from '../../../components/admin/UploadDropzone'
 import { AdminIcon as AdminIcon_80ebcb12978a9db9a1c04af0af89c7ec } from '../../../components/admin/Graphics'
 import { AdminLogo as AdminLogo_80ebcb12978a9db9a1c04af0af89c7ec } from '../../../components/admin/Graphics'
 import { BackToIntranetAction as BackToIntranetAction_be0fa982d8dfe497e4f328c2d4ccb2ff } from '../../../components/admin/BackToIntranet'
@@ -10,6 +12,8 @@ import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc056
 /** @type import('payload').ImportMap */
 export const importMap = {
   "/components/admin/LinkCategoriesBar#LinkCategoriesBar": LinkCategoriesBar_4c5ba3d4e8e3f3cc65631779bbba473f,
+  "/components/admin/UploadDropzone#MediaDropzone": MediaDropzone_845891eca0d55b1d0e1d1a82f764bbe8,
+  "/components/admin/UploadDropzone#DocumentsDropzone": DocumentsDropzone_845891eca0d55b1d0e1d1a82f764bbe8,
   "/components/admin/Graphics#AdminIcon": AdminIcon_80ebcb12978a9db9a1c04af0af89c7ec,
   "/components/admin/Graphics#AdminLogo": AdminLogo_80ebcb12978a9db9a1c04af0af89c7ec,
   "/components/admin/BackToIntranet#BackToIntranetAction": BackToIntranetAction_be0fa982d8dfe497e4f328c2d4ccb2ff,

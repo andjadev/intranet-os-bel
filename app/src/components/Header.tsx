@@ -8,6 +8,7 @@ import { setLang } from '@/app/(frontend)/actions'
 import type { Dict } from '@/i18n/dict'
 import { THEME_COOKIE, type Lang, type Theme } from '@/lib/constants'
 
+import { BrandEmblem } from './BrandEmblem'
 import { Icon } from './Icon'
 
 type Props = {
@@ -62,8 +63,9 @@ export function Header({ lang, theme: initialTheme, t, canAdmin, canChangePasswo
     <header className="header">
       <div className="header-in">
         <Link href="/" className="brand">
-          {/* eslint-disable-next-line @next/next/no-img-element -- original logo file from the company website */}
-          <img src="/logos/os-logo-white.svg" alt="Optimal Systems" className="brand-logo" />
+          <BrandEmblem />
+          {/* eslint-disable-next-line @next/next/no-img-element -- the company logo's lettering, cropped from the original file */}
+          <img src="/logos/os-wordmark-white.svg" alt="Optimal Systems" className="brand-logo" />
           <span className="brand-name">{t.intranet}</span>
         </Link>
         <nav className="nav">

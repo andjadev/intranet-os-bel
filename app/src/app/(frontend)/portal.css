@@ -147,8 +147,10 @@ button { cursor: pointer; }
 }
 .brand { display: flex; align-items: center; gap: 14px; color: #fff; }
 .brand:hover { color: #fff; }
-.brand-logo { display: block; height: 40px; width: auto; transition: transform 300ms var(--ease); }
-.brand:hover .brand-logo { transform: scale(1.04); }
+.brand-logo { display: block; height: 22px; width: auto; margin-left: -4px; }
+/* Particle OS mark (BrandEmblem): the canvas is three times the box so particles can fly in around it. */
+.brand-emblem { position: relative; flex: none; width: 44px; height: 44px; }
+.brand-emblem canvas { position: absolute; left: -44px; top: -44px; width: 132px; height: 132px; pointer-events: none; }
 .brand-name {
   padding-left: 14px; border-left: 1px solid rgba(255, 255, 255, .18);
   font-family: var(--font-display); font-size: 18px; font-weight: 600; letter-spacing: -.1px; color: #fff;

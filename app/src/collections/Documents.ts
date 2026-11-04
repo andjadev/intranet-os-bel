@@ -10,7 +10,12 @@ export const Documents: CollectionConfig = {
     singular: { sr: 'Dokument', en: 'Document', de: 'Dokument' },
     plural: { sr: 'Dokumenti', en: 'Documents', de: 'Dokumente' },
   },
-  admin: { hidden: hiddenForEditors, useAsTitle: 'filename', defaultColumns: ['filename', 'filesize', 'updatedAt'] },
+  admin: {
+    hidden: hiddenForEditors,
+    useAsTitle: 'filename',
+    defaultColumns: ['filename', 'filesize', 'updatedAt'],
+    components: { beforeListTable: ['/components/admin/UploadDropzone#DocumentsDropzone'] },
+  },
   access: { read: loggedIn, create: superadmins, update: superadmins, delete: superadmins },
   fields: [],
   upload: {

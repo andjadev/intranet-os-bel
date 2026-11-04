@@ -171,3 +171,35 @@ html[data-osbel-bg] .template-default,
 html[data-osbel-bg] .template-default__wrap {
   background: transparent;
 }
+
+// "+ Dodaj slike" drop area above the media and documents lists (UploadDropzone).
+.osbel-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 26px 16px;
+  border: 2px dashed #8fcff0;
+  border-radius: var(--style-radius-l);
+  background: rgba(255, 255, 255, 0.7);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 150ms, background 150ms;
+
+  &:hover, &.over {
+    border-color: #007cf0;
+    background: #e8f6fd;
+  }
+}
+.osbel-dropzone-title {
+  font-family: 'Bai Jamjuree', 'Inter', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #007cf0;
+}
+.osbel-dropzone-hint {
+  font-size: 13px;
+  color: var(--theme-elevation-600);
+}
