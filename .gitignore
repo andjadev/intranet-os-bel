@@ -1,3 +1,7 @@
 # Netlify CLI link state
 .netlify/
 slike-tim/
+
+# Temporary colleague passwords and one-off live-site scripts (never commit)
+kolege-lozinke.csv
+app/zz-*.ts
